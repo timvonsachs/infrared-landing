@@ -47,6 +47,15 @@
   .wedge{margin-top:20px;padding-left:16px;border-left:2px solid var(--hot);
     font-size:clamp(15.5px,1.3vw,18px);color:var(--mut);max-width:52ch}
   .wedge b{color:var(--white);font-weight:700}
+  /* CTA im Hero: Wer schon ueberzeugt ist, soll nicht erst scrollen muessen.
+     KEINE erfundene Knappheit („noch 2 frei") — die Positionierung ist
+     radikale Transparenz, und die faellt beim ersten Nachzaehlen. */
+  .herocta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}
+  .cta-btn{display:inline-block;text-decoration:none;cursor:pointer;color:#1a0c06;
+    font-family:var(--D);font-weight:700;font-size:16px;padding:16px 30px;
+    background:linear-gradient(100deg,var(--hot),var(--emb));transition:filter .16s}
+  .cta-btn:hover{filter:brightness(1.15)}
+  .cta-note{font-family:var(--M);font-size:10px;letter-spacing:.12em;color:var(--dim)}
 
   /* ══════════ SIGNATUR: DAS DIPTYCHON ══════════ */
   .scope{position:relative;margin-top:clamp(32px,5vh,60px);border:1px solid var(--edge);
@@ -111,6 +120,18 @@
     font-family:var(--M);font-size:8.5px;letter-spacing:.14em;color:var(--dim)}
   @media(max-width:700px){.siglegend{font-size:7.5px;letter-spacing:.08em}}
 
+  /* ══════════ EIGENER NAME IM THERMOGRAMM ══════════ */
+  /* Der Slider ist das staerkste Element der Seite und zeigte fremde Daten.
+     Ein Feld macht daraus den eigenen Fall. */
+  .mine{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+    margin-top:14px;padding:16px 18px;border:1px solid var(--edge);background:var(--deep)}
+  .mine label{font-size:15px;color:var(--mut)}
+  .mine input{flex:1;min-width:180px;background:var(--void);border:1px solid var(--edge);color:var(--hot);
+    font-family:var(--D);font-size:16px;font-weight:600;padding:12px 14px}
+  .mine input:focus{outline:none;border-color:var(--hot)}
+  .mine input::placeholder{color:var(--dim);font-weight:400}
+  .mine .note{font-family:var(--M);font-size:9.5px;letter-spacing:.06em;color:var(--dim);width:100%}
+
   /* ══════════ AGITATE ══════════ */
   .agit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--edge);
     margin-top:clamp(48px,8vh,96px);border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)}
@@ -126,6 +147,32 @@
   h2{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 84,'opsz' 60;
     font-size:clamp(28px,4.2vw,56px);line-height:1.02;letter-spacing:-.028em;max-width:20ch}
   .eyeb{font-family:var(--M);font-size:10.5px;letter-spacing:.2em;color:var(--emb);margin-bottom:20px}
+
+  /* ══════════ ERINNERUNGS-TEST ══════════ */
+  /* Der Schmerz muss aus der Erinnerung des Lesers kommen, nicht aus unserer
+     Behauptung. Er hat den Fall erlebt — er hat ihn nur nicht abgerufen. */
+  .recall{border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)}
+  /* Kleiner als die globale h2: Hier sind die FRAGEN die Hauptsache, nicht
+     die Ueberschrift darueber. */
+  .recall h2{font-size:clamp(22px,2.9vw,38px);max-width:24ch}
+  .rq{padding:clamp(30px,4.5vh,52px) 0;border-bottom:1px solid var(--edge)}
+  .rq:last-of-type{border-bottom:none}
+  .rq .qn{font-family:var(--M);font-size:10px;letter-spacing:.2em;color:var(--emb);margin-bottom:14px}
+  .rq h3{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 84;
+    font-size:clamp(23px,3.1vw,40px);line-height:1.1;letter-spacing:-.02em;max-width:22ch;margin-bottom:26px}
+  .ropts{display:flex;gap:9px;flex-wrap:wrap}
+  .ropt{appearance:none;background:transparent;border:1px solid var(--edge);color:var(--mut);cursor:pointer;
+    font-family:var(--D);font-size:15px;padding:14px 20px;transition:all .18s;text-align:left}
+  .ropt:hover{border-color:var(--emb);color:var(--ink)}
+  .ropt.on{background:linear-gradient(100deg,var(--mag),var(--emb));border-color:transparent;color:#fff;font-weight:600}
+  /* Der Befund. Erscheint erst nach der Antwort — sonst ist es eine
+     Behauptung statt einer Folge. */
+  .rout{display:none;margin-top:26px;padding:22px 24px;background:var(--deep);
+    border-left:2px solid var(--hot)}
+  .rout.show{display:block;animation:f .45s ease}
+  .rout p{font-family:var(--S);font-style:italic;font-size:clamp(18px,2vw,25px);line-height:1.4;color:var(--ink)}
+  .rout p b{font-family:var(--D);font-style:normal;font-weight:700}
+  .rout .sm{font-family:var(--D);font-style:normal;font-size:14.5px;color:var(--mut);margin-top:12px;line-height:1.6}
 
   /* ══════════ LECK-RECHNER ══════════ */
   .calc{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,4vw,72px);margin-top:44px;align-items:start}
@@ -233,6 +280,10 @@
     <h1>Jeden Monat kauft jemand woanders, <span class="l">der dich zuerst gefragt hat.</span></h1>
     <p class="sub">Er hat nicht Nein gesagt. Er hat gefragt, was es kostet — und deine Antwort kam zwei Tage zu spät. <b>Das Bitterste: Du erfährst nie, dass es passiert ist.</b></p>
     <p class="wedge">Kein wichtiger Kontakt fällt dir mehr durchs Raster — <b>und jede Nachricht schreibst du selbst.</b></p>
+    <div class="herocta">
+      <a href="#platz" class="cta-btn" id="heroCta">Platz sichern</a>
+      <span class="cta-note">5 Plätze · kostenlos · ich melde mich persönlich</span>
+    </div>
 
     <div class="scope" id="scope">
       <div class="scope-top"><span>POSTFACH · LETZTE 90 TAGE</span><span class="r" id="scopeState">ZIEH DEN GRIFF →</span></div>
@@ -240,7 +291,7 @@
         <!-- LINKS: wie du es siehst -->
         <div class="layer plain">
           <div class="rowlist">
-            <div class="row"><span class="nm">sandra.k</span><span class="txt">Was kostet dein 1:1 eigentlich? Klingt gena…</span><span class="meta">12 T</span></div>
+            <div class="row"><span class="nm" id="pName">sandra.k</span><span class="txt" id="pTxt">Was kostet dein 1:1 eigentlich? Klingt gena…</span><span class="meta">12 T</span></div>
             <div class="row"><span class="nm">marco_baut</span><span class="txt">Mega Gespräch! Meld dich nach meinem Urla…</span><span class="meta">3 W</span></div>
             <div class="row"><span class="nm">jule.coacht</span><span class="txt">Genau mein Thema gerade 😩 Wie läuft das…</span><span class="meta">1 T</span></div>
             <div class="row"><span class="nm">melanie</span><span class="txt">Du: Schreib ich dir heute Abend in Ruhe ✍️</span><span class="meta">12 T</span></div>
@@ -250,7 +301,7 @@
         <!-- RECHTS: wie Infrared es sieht -->
         <div class="layer therm" id="therm">
           <div class="rowlist">
-            <div class="row r1"><span class="nm">Sandra K.</span><span class="why">Preisfrage offen — <q>klingt genau nach dem, was ich brauche</q></span><span class="sig s-a">PREISFRAGE OFFEN</span></div>
+            <div class="row r1"><span class="nm" id="tName">Sandra K.</span><span class="why" id="tWhy">Preisfrage offen — <q>klingt genau nach dem, was ich brauche</q></span><span class="sig s-a" id="tSig">PREISFRAGE OFFEN</span></div>
             <div class="row r2"><span class="nm">Marco B.</span><span class="why">Sein <q>meld dich nach dem Urlaub</q> ist seit 3 Wochen fällig</span><span class="sig s-a">ZUSAGE ÜBERFÄLLIG</span></div>
             <div class="row r3"><span class="nm">Jule</span><span class="why">Story-Antwort gestern 21:14 — Fenster offen</span><span class="sig s-b">FRAGE UNBEANTWORTET</span></div>
             <div class="row r4"><span class="nm">Melanie</span><span class="why"><q>Heute Abend</q> — dein Wort, seit 12 Tagen offen</span><span class="sig s-a">DEIN WORT OFFEN</span></div>
@@ -264,6 +315,11 @@
         <div class="hint-drag" id="hintDrag">ZIEH DEN GRIFF NACH LINKS</div>
       </div>
     </div>
+    <div class="mine rv">
+      <label for="myName">Wie heißt jemand, der gerade auf eine Antwort von dir wartet?</label>
+      <input id="myName" type="text" maxlength="24" placeholder="Vorname genügt" autocomplete="off" spellcheck="false">
+      <div class="note">BLEIBT IN DEINEM BROWSER · WIRD NICHT GESENDET · KEINE SCHATTENPROFILE</div>
+    </div>
   </section>
 
   <!-- ═══ AGITATE ═══ -->
@@ -272,6 +328,34 @@
     <div class="ag rv"><q>Meld dich nach meinem Urlaub, dann machen wir das klar.</q><div class="m">@MARCO_BAUT · 90 MIN NACH DEINEM ANGEBOT</div><p class="o">Sein Urlaub war vor drei Wochen. <b>Niemand hat sich gemeldet.</b></p></div>
     <div class="ag rv"><q>Schreib ich dir heute Abend in Ruhe.</q><div class="m">DEINE LETZTE NACHRICHT AN @MELANIE</div><p class="o">Nicht sie ist abgesprungen. <b>Dein Wort ist es.</b></p></div>
   </div>
+
+  <!-- ═══ ERINNERUNGS-TEST ═══ -->
+  <section class="band recall">
+    <div class="eyeb rv">ZWEI FRAGEN AN DICH</div>
+    <h2 class="rv" style="margin-bottom:8px">Du musst nichts rechnen. Nur nachsehen, ob du es weißt.</h2>
+
+    <div class="rq rv">
+      <div class="qn">01</div>
+      <h3>Wem hast du zuletzt gesagt: „Ich melde mich"?</h3>
+      <div class="ropts" id="rq1">
+        <button class="ropt" data-v="weiss" type="button">Ich weiß genau, wer das war</button>
+        <button class="ropt" data-v="unklar" type="button">Fällt mir gerade keiner ein</button>
+      </div>
+      <div class="rout" id="ro1"><p id="ro1t"></p><p class="sm" id="ro1s"></p></div>
+    </div>
+
+    <div class="rq rv">
+      <div class="qn">02</div>
+      <h3>Wann hat dich zuletzt jemand nach dem Preis gefragt?</h3>
+      <div class="ropts" id="rq2">
+        <button class="ropt" data-v="heute" type="button">Heute</button>
+        <button class="ropt" data-v="woche" type="button">Diese Woche</button>
+        <button class="ropt" data-v="laenger" type="button">Länger her</button>
+        <button class="ropt" data-v="unklar" type="button">Weiß ich nicht mehr</button>
+      </div>
+      <div class="rout" id="ro2"><p id="ro2t"></p><p class="sm" id="ro2s"></p></div>
+    </div>
+  </section>
 
   <!-- ═══ RECHNER ═══ -->
   <section class="band">
@@ -360,7 +444,7 @@
     <div class="ctarow">
       <div class="rv"><h2>Ich suche 5 Coaches für den Anfang.</h2>
         <p>Wir schauen gemeinsam in deine letzten 90 Tage, und ich zeige dir die Gespräche, in denen jemand auf dich wartet. <b>Wenn's dir nichts bringt, sage ich dir das zuerst.</b></p></div>
-      <div class="rv">
+      <div class="rv" id="platz">
         <form id="wl" novalidate>
           <div class="r"><input type="email" id="email" placeholder="Deine E-Mail" required autocomplete="email">
             <button type="submit">Platz sichern</button></div>
@@ -414,10 +498,116 @@
   function move(e){ if(dragging){ pos(e); e.preventDefault(); } }
   function end(){ dragging=false; }
 
+  // Schnittstelle nach aussen: Die Namenseingabe muss den Auto-Schwenk
+  // anhalten koennen, sonst schwenkt er ueber den eigenen Namen hinweg.
+  window.__irScope={ set, stop(){ auto=false; scope.classList.add('touched'); } };
+
   stage.addEventListener('pointerdown', start);
   addEventListener('pointermove', move, {passive:false});
   addEventListener('pointerup', end);
   stage.addEventListener('pointermove', e=>{ if(!dragging && !auto) pos(e); });
+})();
+
+/* ══════ EIGENER NAME IM THERMOGRAMM ══════ */
+(function(){
+  const inp=document.getElementById('myName');
+  const pN=document.getElementById('pName'), pT=document.getElementById('pTxt'),
+        tN=document.getElementById('tName'), tW=document.getElementById('tWhy'),
+        tS=document.getElementById('tSig');
+  const orig={pN:pN.textContent,pT:pT.textContent,tN:tN.textContent,tW:tW.innerHTML,tS:tS.textContent};
+
+  // DER NAME VERLAESST DAS GERAET NIE. Er ist ein personenbezogenes Datum
+  // eines Dritten, der nicht eingewilligt hat — dafuer gibt es keine
+  // Rechtsgrundlage, und „keine Schattenprofile" steht im Footer.
+  // Getrackt wird nur, DASS jemand etwas eingetippt hat.
+  let gemeldet=false, t, aufgezogen=false;
+
+  /* Der Griff faehrt einmal nach links, damit der eigene Name auftaucht.
+     Sanft und nur einmal — danach gehoert die Steuerung wieder dem Leser. */
+  function zieheAuf(){
+    const S=window.__irScope; if(!S) return;
+    S.stop();
+    const th=document.getElementById('therm');
+    const von=parseFloat(getComputedStyle(th).getPropertyValue('--split'))||60, bis=2;
+    const t0=performance.now();
+    (function lauf(now){
+      const k=Math.min(1,(now-t0)/900), e=1-Math.pow(1-k,3);
+      S.set(von+(bis-von)*e);
+      if(k<1) requestAnimationFrame(lauf);
+    })(t0);
+  }
+  function sauber(v){ return v.replace(/[<>&"']/g,'').trim().slice(0,24); }
+
+  inp.addEventListener('input', ()=>{
+    const n=sauber(inp.value);
+    if(n.length>=2){
+      pN.textContent=n.toLowerCase().replace(/\s+/g,'.');
+      pT.textContent='…';
+      tN.textContent=n;
+      tW.innerHTML='Wartet auf deine Antwort — seit du zuletzt geschrieben hast';
+      tS.textContent='DEIN WORT OFFEN';
+      // Den Payoff sichtbar machen: Ohne das steht der eigene Name hinter
+      // dem Vorhang und der Moment „das bin ja ich" faellt aus.
+      if(!aufgezogen){ aufgezogen=true; zieheAuf(); }
+      if(!gemeldet){ gemeldet=true; clearTimeout(t);
+        t=setTimeout(()=>{try{trk('own_name_entered',null,n.length)}catch(e){}},1200); }
+    }else{
+      pN.textContent=orig.pN; pT.textContent=orig.pT;
+      tN.textContent=orig.tN; tW.innerHTML=orig.tW; tS.textContent=orig.tS;
+    }
+  });
+})();
+
+/* ══════ ERINNERUNGS-TEST ══════ */
+(function(){
+  let a1=null, a2=null;
+
+  // Die Befunde. Der harte Fall ist NICHT „du hast jemanden vergessen" —
+  // das weiss niemand. Er ist: du weisst nicht, ob du jemanden vergessen
+  // hast. Das ist nachpruefbar wahr und trifft trotzdem.
+  const T1={
+    weiss:['Dann ist da <b>ein Mensch</b>, an den du gerade denkst.',
+           'Die Frage ist nicht, ob du ihn vergessen hast. Sie ist: Wie viele andere gibt es, an die du gerade nicht denkst?'],
+    unklar:['Genau das ist es.',
+            'Nicht, dass du jemanden vergessen hast — dass du <b>nicht weißt, ob</b> du jemanden vergessen hast. Ein Verlust, den man nicht bemerkt, korrigiert sich nicht von selbst.']
+  };
+  const T2={
+    heute:['Gut. Dann läuft dein Kanal.',
+           'Umso mehr Gespräche laufen, desto mehr laufen auch aus. Die von heute erinnerst du. Die von vor drei Wochen?'],
+    woche:['Diese Woche also.',
+           'Weißt du auch noch, ob du geantwortet hast — und ob danach noch etwas kam?'],
+    laenger:['Länger her.',
+             'Dann ist entweder gerade wenig los, oder die Anfragen kommen und du siehst sie nicht mehr. Das eine ist ein Reichweitenproblem. Das andere nicht.'],
+    unklar:['Das ist die ehrlichste Antwort — und die teuerste.',
+            'Eine Preisfrage ist das deutlichste Kaufsignal, das es gibt. Wenn du nicht weißt, wann die letzte kam, weißt du auch nicht, ob sie beantwortet wurde.']
+  };
+
+  function bind(id, store, texte, outId){
+    const box=document.getElementById(id);
+    box.addEventListener('click', e=>{
+      const b=e.target.closest('.ropt'); if(!b) return;
+      box.querySelectorAll('.ropt').forEach(o=>o.classList.remove('on'));
+      b.classList.add('on');
+      const v=b.dataset.v;
+      store(v);
+      const t=texte[v];
+      document.getElementById(outId+'t').innerHTML=t[0];
+      document.getElementById(outId+'s').innerHTML=t[1];
+      document.getElementById(outId).classList.add('show');
+      try{trk('recall_answer', id+':'+v)}catch(e){}
+      schluss();
+    });
+  }
+  bind('rq1', v=>a1=v, T1, 'ro1');
+  bind('rq2', v=>a2=v, T2, 'ro2');
+
+  // Beide unklar: der Fall, fuer den das Produkt gebaut ist. Wird gemessen,
+  // weil er das staerkste Kaufsignal der Seite ist.
+  function schluss(){
+    if(a1&&a2){
+      try{trk('recall_complete', a1+'/'+a2, (a1==='unklar'?1:0)+(a2==='unklar'?1:0))}catch(e){}
+    }
+  }
 })();
 
 /* ══════ LECK-RECHNER ══════ */
@@ -478,6 +668,16 @@
           ? `Über ein Jahr rund <b>${(val*12).toLocaleString('de-DE')} €</b> aus Gesprächen, die du längst geführt hast.`
           : `Klingt klein? Es sind Menschen, die dich <b>zuerst gefragt haben</b>. Die kommen nicht wieder.`;
   }
+})();
+
+/* ══════ HERO-CTA ══════ */
+(function(){
+  const b=document.getElementById('heroCta'); if(!b) return;
+  b.addEventListener('click', ()=>{
+    try{trk('hero_cta_click')}catch(e){}
+    // Nach dem Sprung ins Feld setzen — sonst muss man nochmal tippen.
+    setTimeout(()=>{const i=document.getElementById('email'); if(i) i.focus({preventScroll:true})},600);
+  });
 })();
 
 /* ══════ Zettel ══════ */
