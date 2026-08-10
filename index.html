@@ -50,7 +50,7 @@
 
   <header style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 0">
     <span style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:-.01em"><i style="width:7px;height:7px;background:#e02b1d;border-radius:50%"></i>Infrared</span>
-    <span style="font-size:14.5px;color:#6b6864"><span data-frei>5</span> von <span data-plaetze>5</span> Plätzen frei</span>
+    <span style="font-size:14.5px;color:#6b6864" data-platzzeile>5 von 5 Plätzen frei</span>
   </header>
 
   <!-- ══ 1 · DER HAKEN ══ -->
@@ -68,7 +68,7 @@
 
     <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:clamp(26px,3.4vw,42px)">
       <a href="#platz" class="knopf-d" id="heroCta">Ich zeig dir, wer wartet — kostenlos</a>
-      <span style="display:inline-flex;align-items:center;gap:9px;font-size:15px;color:#101010"><i style="width:8px;height:8px;border-radius:50%;background:#e02b1d;flex:none"></i><b style="font-weight:600"><span data-frei>5</span> von <span data-plaetze>5</span> Plätzen frei</b></span>
+      <span style="display:inline-flex;align-items:center;gap:9px;font-size:15px;color:#101010"><i style="width:8px;height:8px;border-radius:50%;background:#e02b1d;flex:none"></i><b style="font-weight:600" data-platzzeile>5 von 5 Plätzen frei</b></span>
       <span style="font-size:14.5px;color:#6b6864;max-width:36ch">Ich mache jeden Befund selbst. Mehr als fünf schaffe ich nebenbei nicht.</span>
     </div>
 
@@ -274,8 +274,45 @@ addEventListener('scroll',function(){
   if(p>tiefe){ tiefe=p; trk('scroll_depth',null,p); }
 },{passive:true});
 
+/* ══════ FREIE PLÄTZE ══════
+   Kommt aus der Tabelle `plaetze`, nicht aus der Zahl der Anmeldungen.
+   Eine Anmeldung ist kein Platz — Tim entscheidet nach dem Gespräch. Und
+   ein Zähler auf Anmeldungsbasis waere mit fünf Wegwerf-Adressen auf null
+   zu bringen.
+
+   Faellt der Abruf aus, bleibt die im HTML stehende Zahl stehen. Eine
+   Verknappungsangabe darf nie verschwinden, weil ein fetch scheitert —
+   aber sie darf auch nicht raten.                                        */
+(function(){
+  const zeilen=document.querySelectorAll('[data-platzzeile]');
+  if(!zeilen.length) return;
+  fetch(SB+'/rest/v1/plaetze?select=gesamt,frei&limit=1',{headers:{apikey:SBK,Authorization:'Bearer '+SBK}})
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(d){
+      if(!d || !d.length) return;
+      const g=parseInt(d[0].gesamt,10), f=parseInt(d[0].frei,10);
+      if(!isFinite(g) || !isFinite(f)) return;
+      const text = f<=0 ? 'Alle '+g+' Plätze vergeben'
+                 : f===1 ? 'Noch 1 von '+g+' Plätzen frei'
+                 : f+' von '+g+' Plätzen frei';
+      zeilen.forEach(function(el){ el.textContent=text; });
+
+      // Bei null Plaetzen aendert sich das Versprechen. Weiter „Platz
+      // sichern" anzubieten waere eine Zusage, die nicht eingehalten wird.
+      if(f<=0){
+        const c=document.getElementById('heroCta');
+        if(c) c.textContent='Auf die Nachrückliste';
+        const sch=document.getElementById('schluss');
+        S.ausgebucht=true;
+        if(sch) sch.textContent='Die fünf Plätze sind vergeben. Schreib mir trotzdem — ich sage dir, wann wieder einer frei wird, und du stehst dann oben.';
+      }
+      trk('plaetze_geladen',null,f);
+    })
+    .catch(function(){});
+})();
+
 /* ══════ ZUSTAND ══════ */
-const S={ name:'', person:'sandra', gesendet:false };
+const S={ name:'', person:'sandra', gesendet:false, ausgebucht:false };
 
 const P={
   sandra:{ eigen:true, kurz:'S', bg:'#d9cec2', fg:'#4a4136',
@@ -355,7 +392,7 @@ function malen(){
     b.style.borderColor = b.dataset.p===S.person ? '#101010' : '#fff';
   });
 
-  $('schluss').textContent = S.name.length>=2
+  if(!S.ausgebucht) $('schluss').textContent = S.name.length>=2
     ? 'Sag mir, dass du dabei bist, und ob '+name+' immer noch wartet. Mehr brauche ich nicht, um anzufangen.'
     : 'Sag mir, was du verkaufst und wie viele Leute dich im Monat nach dem Preis fragen. Mehr brauche ich nicht, um dir zu sagen, ob es passt.';
 }
