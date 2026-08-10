@@ -21,6 +21,9 @@ CREATE TABLE IF NOT EXISTS waitlist (
 ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Anon can insert" ON waitlist FOR INSERT TO anon WITH CHECK (true);
 
+-- Eine E-Mail nur einmal auf der Liste.
+CREATE UNIQUE INDEX IF NOT EXISTS idx_waitlist_email_unique ON waitlist (lower(email));
+
 -- Index für schnelle Status-Abfragen
 CREATE INDEX idx_waitlist_status ON waitlist(status);
 CREATE INDEX idx_waitlist_created ON waitlist(created_at DESC);
@@ -82,10 +85,15 @@ CREATE POLICY "Anon can insert attribution" ON waitlist_attribution FOR INSERT T
 
 -- ============================================
 -- VIEWS (für Dashboard)
+--
+-- ACHTUNG: Views umgehen die RLS der zugrundeliegenden Tabellen, weil sie
+-- mit den Rechten ihres Erstellers laufen. Ohne REVOKE + security_invoker
+-- sind sie mit dem oeffentlichen Key aus dem Browser lesbar — siehe
+-- supabase-fix-rls.sql. Das war hier der Fall.
 -- ============================================
 
 -- Daily Stats
-CREATE OR REPLACE VIEW v_daily_stats AS
+CREATE OR REPLACE VIEW v_daily_stats WITH (security_invoker = on) AS
 SELECT 
   DATE(created_at) as day,
   COUNT(*) as signups,
@@ -96,7 +104,7 @@ GROUP BY DATE(created_at)
 ORDER BY day DESC;
 
 -- Event Summary (letzte 30 Tage)
-CREATE OR REPLACE VIEW v_event_summary AS
+CREATE OR REPLACE VIEW v_event_summary WITH (security_invoker = on) AS
 SELECT 
   event,
   COUNT(*) as total,
