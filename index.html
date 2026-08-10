@@ -1,755 +1,434 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Infrared — jemand hat dich zuerst gefragt und woanders gekauft</title>
-<meta name="description" content="Jeden Monat kauft jemand woanders, der dich zuerst gefragt hat. Infrared zeigt dir, wer gerade dabei ist.">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infrared — ich suche fünf Coaches</title>
+<meta name="description" content="Ich lese deine letzten 90 Tage Instagram- und WhatsApp-Chats und schicke dir eine Liste: wer auf eine Antwort von dir wartet, mit dem Satz aus dem Chat als Beweis. Kostenlos, für die ersten fünf.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Infrared — ich suche fünf Coaches">
+<meta property="og:description" content="Wer wartet gerade auf eine Antwort von dir? Ich lese deine letzten 90 Tage und schicke dir die Namen — mit dem Satz aus dem Chat als Beweis.">
+<meta property="og:type" content="website">
 <link rel="stylesheet" href="fonts.css">
 <style>
-  :root{
-    /* Eisen-Thermalskala */
-    --void:#05060a; --deep:#0a0b14; --slate:#171a24; --edge:#232838;
-    --v1:#2a1b4a;  --v2:#5b2a6e;  --mag:#a83368; --emb:#e0632f; --hot:#ff9d3c; --white:#ffe6b8;
-    --grey:#6e737f; --greyer:#3d424e;
-    --ink:#f2ede4; --mut:#8b91a0; --dim:#565c69;
-    --D:'Bricolage Grotesque',sans-serif; --M:'IBM Plex Mono',monospace; --S:'Instrument Serif',serif;
-  }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{background:var(--void);color:var(--ink);font-family:var(--D);font-size:17px;line-height:1.6;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden}
-  ::selection{background:var(--mag);color:#fff}
-  :focus-visible{outline:2px solid var(--hot);outline-offset:3px}
-  .wrap{max-width:1320px;margin:0 auto;padding:0 clamp(18px,4vw,56px)}
-
-  /* Filmkorn über allem */
-  body::after{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.16;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E")}
-
-  nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;
-    font-family:var(--M);font-size:10.5px;letter-spacing:.18em;color:var(--dim)}
-  nav .lg{display:flex;align-items:center;gap:9px;color:var(--ink);font-weight:500;letter-spacing:.26em}
-  nav .lg i{width:7px;height:7px;background:var(--hot);border-radius:50%;box-shadow:0 0 14px var(--emb);animation:bl 3s infinite}
-  @keyframes bl{0%,100%{opacity:1}50%{opacity:.45}}
-
-  /* ══════════ HERO ══════════ */
-  .hero{padding:clamp(30px,5vh,58px) 0 clamp(24px,4vh,44px)}
-  .kick{font-family:var(--M);font-size:10.5px;letter-spacing:.2em;color:var(--emb);margin-bottom:22px}
-  h1{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 82,'opsz' 96;
-    font-size:clamp(38px,6.6vw,92px);line-height:.96;letter-spacing:-.03em;max-width:15ch}
-  h1 .l{background:linear-gradient(96deg,var(--mag),var(--emb) 60%,var(--hot));
-    -webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{margin-top:26px;font-size:clamp(16.5px,1.4vw,20px);color:var(--mut);max-width:54ch}
-  .sub b{color:var(--ink);font-weight:600}
-  /* Die Kernzeile. Steht oben, weil der erste Halbsatz Marktstandard ist —
-     jedes CRM verspricht ihn. Der Keil ist der zweite. */
-  .wedge{margin-top:20px;padding-left:16px;border-left:2px solid var(--hot);
-    font-size:clamp(15.5px,1.3vw,18px);color:var(--mut);max-width:52ch}
-  .wedge b{color:var(--white);font-weight:700}
-  /* CTA im Hero: Wer schon ueberzeugt ist, soll nicht erst scrollen muessen.
-     KEINE erfundene Knappheit („noch 2 frei") — die Positionierung ist
-     radikale Transparenz, und die faellt beim ersten Nachzaehlen. */
-  .herocta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:28px}
-  .cta-btn{display:inline-block;text-decoration:none;cursor:pointer;color:#1a0c06;
-    font-family:var(--D);font-weight:700;font-size:16px;padding:16px 30px;
-    background:linear-gradient(100deg,var(--hot),var(--emb));transition:filter .16s}
-  .cta-btn:hover{filter:brightness(1.15)}
-  .cta-note{font-family:var(--M);font-size:10px;letter-spacing:.12em;color:var(--dim)}
-
-  /* ══════════ SIGNATUR: DAS DIPTYCHON ══════════ */
-  .scope{position:relative;margin-top:clamp(32px,5vh,60px);border:1px solid var(--edge);
-    background:var(--deep);user-select:none;touch-action:pan-y;overflow:hidden}
-  .scope-top{display:flex;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--edge);
-    font-family:var(--M);font-size:10px;letter-spacing:.16em;color:var(--dim);position:relative;z-index:6}
-  .scope-top .r{color:var(--hot)}
-  .stage{position:relative;height:clamp(360px,52vh,520px)}
-
-  .layer{position:absolute;inset:0;padding:clamp(14px,2.2vh,26px) clamp(14px,2vw,26px)}
-  /* — links: wie du es siehst — */
-  .plain{background:
-    repeating-linear-gradient(180deg,transparent 0 3px,rgba(255,255,255,.012) 3px 4px),var(--deep)}
-  /* — rechts: wie Infrared es sieht — */
-  .therm{background:radial-gradient(120% 100% at 70% 40%,var(--v1),var(--void) 70%);
-    clip-path:inset(0 0 0 var(--split,50%));z-index:2}
-  .therm::before{content:"";position:absolute;inset:0;pointer-events:none;
-    background:repeating-linear-gradient(180deg,transparent 0 2px,rgba(0,0,0,.22) 2px 3px);mix-blend-mode:multiply}
-
-  .rowlist{display:flex;flex-direction:column;gap:clamp(6px,1.1vh,12px);height:100%}
-  .row{flex:1;display:grid;grid-template-columns:minmax(90px,150px) 1fr auto;gap:clamp(10px,1.6vw,22px);
-    align-items:center;padding:0 clamp(10px,1.4vw,18px);border:1px solid transparent;min-height:0}
-  /* plain */
-  .plain .row{border-color:#12151d;background:#0b0d13}
-  .plain .nm{font-weight:500;font-size:clamp(13px,1.15vw,16px);color:var(--grey)}
-  .plain .txt{font-size:clamp(12px,1.05vw,14.5px);color:var(--greyer);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .plain .meta{font-family:var(--M);font-size:10px;color:var(--greyer);letter-spacing:.08em}
-  /* thermal */
-  .therm .row{border-color:rgba(255,255,255,.06);position:relative;overflow:hidden}
-  .therm .row::before{content:"";position:absolute;inset:0;z-index:0;opacity:.9;
-    background:radial-gradient(90% 220% at 6% 50%, var(--c1), transparent 62%)}
-  .therm .row>*{position:relative;z-index:1}
-  .therm .nm{font-weight:700;font-size:clamp(13px,1.15vw,16px);color:var(--white)}
-  .therm .why{font-size:clamp(12px,1.05vw,14.5px);color:#e8d6c4;line-height:1.35}
-  .therm .why q{font-family:var(--S);font-style:italic;color:#fff;quotes:"„" "“"}
-  /* KEINE Temperaturzahl mehr. Ein Score mit Nachkommastelle behauptet eine
-     Messung; gebaut werden drei getrennte, erklaerbare Signale (PRD 4.5).
-     Die Waerme bleibt als Verlauf — sie ist das Markenbild, nicht die Zahl. */
-  .therm .sig{font-family:var(--M);font-weight:500;font-size:clamp(8.5px,.85vw,10px);
-    letter-spacing:.12em;white-space:nowrap;padding:5px 9px;border:1px solid currentColor;border-radius:2px}
-  .therm .s-a{color:var(--white);box-shadow:0 0 16px rgba(255,157,60,.25)}
-  .therm .s-b{color:#e8d6c4}
-  .therm .s-c{color:var(--dim);border-color:var(--greyer)}
-  .r1{--c1:rgba(255,157,60,.5)} .r2{--c1:rgba(224,99,47,.42)} .r3{--c1:rgba(168,51,104,.4)}
-  .r4{--c1:rgba(91,42,110,.42)} .r5{--c1:rgba(42,27,74,.5)}
-
-  /* Griff */
-  .handle{position:absolute;top:0;bottom:0;left:var(--split,50%);width:2px;z-index:5;
-    background:linear-gradient(180deg,var(--white),var(--hot),var(--mag),var(--v2));cursor:ew-resize;
-    box-shadow:0 0 22px rgba(255,157,60,.55)}
-  .knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;
-    border-radius:50%;background:var(--void);border:1px solid var(--hot);display:grid;place-items:center;
-    font-family:var(--M);font-size:9px;letter-spacing:.1em;color:var(--hot);cursor:ew-resize;
-    box-shadow:0 0 30px rgba(255,157,60,.35)}
-  .knob::before{content:"◀ ▶"}
-  .hint-drag{position:absolute;left:0;right:0;bottom:12px;text-align:center;z-index:6;pointer-events:none;
-    font-family:var(--M);font-size:10px;letter-spacing:.2em;color:var(--mut);transition:opacity .4s}
-  .scope.touched .hint-drag{opacity:0}
-  .lbl{position:absolute;top:12px;font-family:var(--M);font-size:9.5px;letter-spacing:.18em;z-index:6;pointer-events:none}
-  .lbl.left{left:16px;color:var(--greyer)} .lbl.right{right:16px;color:var(--hot)}
-  .siglegend{position:absolute;left:0;right:0;bottom:-26px;text-align:center;z-index:6;pointer-events:none;
-    font-family:var(--M);font-size:8.5px;letter-spacing:.14em;color:var(--dim)}
-  @media(max-width:700px){.siglegend{font-size:7.5px;letter-spacing:.08em}}
-
-  /* ══════════ EIGENER NAME IM THERMOGRAMM ══════════ */
-  /* Der Slider ist das staerkste Element der Seite und zeigte fremde Daten.
-     Ein Feld macht daraus den eigenen Fall. */
-  .mine{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-    margin-top:14px;padding:16px 18px;border:1px solid var(--edge);background:var(--deep)}
-  .mine label{font-size:15px;color:var(--mut)}
-  .mine input{flex:1;min-width:180px;background:var(--void);border:1px solid var(--edge);color:var(--hot);
-    font-family:var(--D);font-size:16px;font-weight:600;padding:12px 14px}
-  .mine input:focus{outline:none;border-color:var(--hot)}
-  .mine input::placeholder{color:var(--dim);font-weight:400}
-  .mine .note{font-family:var(--M);font-size:9.5px;letter-spacing:.06em;color:var(--dim);width:100%}
-
-  /* ══════════ AGITATE ══════════ */
-  .agit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--edge);
-    margin-top:clamp(48px,8vh,96px);border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)}
-  @media(max-width:880px){.agit{grid-template-columns:1fr}}
-  .ag{background:var(--void);padding:30px 26px;transition:background .4s}
-  .ag:hover{background:var(--deep)}
-  .ag q{font-family:var(--S);font-style:italic;font-size:clamp(19px,1.8vw,24px);line-height:1.35;quotes:"„" "“"}
-  .ag .m{font-family:var(--M);font-size:9.5px;letter-spacing:.14em;color:var(--dim);margin:16px 0 12px}
-  .ag .o{font-size:15px;color:var(--mut)} .ag .o b{color:var(--mag);font-weight:700}
-
-  section{position:relative}
-  .band{padding:clamp(56px,9vh,110px) 0}
-  h2{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 84,'opsz' 60;
-    font-size:clamp(28px,4.2vw,56px);line-height:1.02;letter-spacing:-.028em;max-width:20ch}
-  .eyeb{font-family:var(--M);font-size:10.5px;letter-spacing:.2em;color:var(--emb);margin-bottom:20px}
-
-  /* ══════════ ERINNERUNGS-TEST ══════════ */
-  /* Der Schmerz muss aus der Erinnerung des Lesers kommen, nicht aus unserer
-     Behauptung. Er hat den Fall erlebt — er hat ihn nur nicht abgerufen. */
-  .recall{border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)}
-  /* Kleiner als die globale h2: Hier sind die FRAGEN die Hauptsache, nicht
-     die Ueberschrift darueber. */
-  .recall h2{font-size:clamp(22px,2.9vw,38px);max-width:24ch}
-  .rq{padding:clamp(30px,4.5vh,52px) 0;border-bottom:1px solid var(--edge)}
-  .rq:last-of-type{border-bottom:none}
-  .rq .qn{font-family:var(--M);font-size:10px;letter-spacing:.2em;color:var(--emb);margin-bottom:14px}
-  .rq h3{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 84;
-    font-size:clamp(23px,3.1vw,40px);line-height:1.1;letter-spacing:-.02em;max-width:22ch;margin-bottom:26px}
-  .ropts{display:flex;gap:9px;flex-wrap:wrap}
-  .ropt{appearance:none;background:transparent;border:1px solid var(--edge);color:var(--mut);cursor:pointer;
-    font-family:var(--D);font-size:15px;padding:14px 20px;transition:all .18s;text-align:left}
-  .ropt:hover{border-color:var(--emb);color:var(--ink)}
-  .ropt.on{background:linear-gradient(100deg,var(--mag),var(--emb));border-color:transparent;color:#fff;font-weight:600}
-  /* Der Befund. Erscheint erst nach der Antwort — sonst ist es eine
-     Behauptung statt einer Folge. */
-  .rout{display:none;margin-top:26px;padding:22px 24px;background:var(--deep);
-    border-left:2px solid var(--hot)}
-  .rout.show{display:block;animation:f .45s ease}
-  .rout p{font-family:var(--S);font-style:italic;font-size:clamp(18px,2vw,25px);line-height:1.4;color:var(--ink)}
-  .rout p b{font-family:var(--D);font-style:normal;font-weight:700}
-  .rout .sm{font-family:var(--D);font-style:normal;font-size:14.5px;color:var(--mut);margin-top:12px;line-height:1.6}
-
-  /* ══════════ LECK-RECHNER ══════════ */
-  .calc{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,4vw,72px);margin-top:44px;align-items:start}
-  @media(max-width:960px){.calc{grid-template-columns:1fr;gap:32px}}
-  .qlab{font-family:var(--M);font-size:10.5px;letter-spacing:.15em;color:var(--dim);margin-bottom:13px}
-  .opts{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:28px}
-  .opt{appearance:none;background:transparent;border:1px solid var(--edge);color:var(--mut);cursor:pointer;
-    font-family:var(--M);font-size:12.5px;padding:12px 18px;transition:all .16s}
-  .opt:hover{border-color:var(--emb);color:var(--ink)}
-  .opt.on{background:linear-gradient(100deg,var(--mag),var(--emb));border-color:transparent;color:#fff;font-weight:500}
-  .qhint{font-family:var(--M);font-size:9.5px;letter-spacing:.05em;color:var(--dim);line-height:1.8;margin:-18px 0 26px}
-  /* Die Annahmen sind editierbar, weil sie geschaetzt sind. Eine feste Zahl
-     hier waere genau der Vendor-Claim, gegen den Infrared antritt. */
-  .knobs{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
-  .knobs label{display:flex;justify-content:space-between;align-items:center;gap:12px;
-    font-size:13.5px;color:var(--mut);border:1px solid var(--edge);padding:11px 14px}
-  .knobs span{font-family:var(--M);font-size:12px;color:var(--dim);white-space:nowrap}
-  .knobs input{width:52px;background:var(--void);border:1px solid var(--edge);color:var(--hot);
-    font-family:var(--M);font-size:14px;padding:5px 6px;text-align:right}
-  .knobs input:focus{outline:none;border-color:var(--hot)}
-  .meter{border:1px solid var(--edge);background:linear-gradient(180deg,var(--deep),var(--void));position:relative;overflow:hidden}
-  .meter::before{content:"";position:absolute;inset:0;opacity:var(--fill,0);transition:opacity .8s;
-    background:radial-gradient(120% 90% at 50% 120%,var(--mag),transparent 65%)}
-  .mtop{display:flex;justify-content:space-between;padding:13px 20px;border-bottom:1px solid var(--edge);
-    font-family:var(--M);font-size:9.5px;letter-spacing:.16em;color:var(--dim);position:relative}
-  .mbody{padding:36px 24px 30px;position:relative}
-  .mlab{font-family:var(--M);font-size:10.5px;letter-spacing:.16em;color:var(--dim);margin-bottom:14px}
-  .mnum{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 78,'opsz' 96;
-    font-size:clamp(52px,8vw,110px);line-height:.88;letter-spacing:-.04em;color:var(--greyer);transition:color .6s}
-  .mnum.live{background:linear-gradient(96deg,var(--white),var(--hot) 40%,var(--mag));
-    -webkit-background-clip:text;background-clip:text;color:transparent}
-  .munit{font-family:var(--M);font-size:11px;letter-spacing:.12em;color:var(--dim);margin-top:14px}
-  .mverd{margin-top:24px;padding-top:20px;border-top:1px solid var(--edge);font-family:var(--S);font-style:italic;
-    font-size:clamp(17px,1.6vw,21px);line-height:1.45;color:var(--mut);min-height:3.2em}
-  .mverd b{font-family:var(--D);font-style:normal;font-weight:700;color:var(--ink)}
-  .mfine{padding:13px 20px;border-top:1px solid var(--edge);font-family:var(--M);font-size:9.5px;
-    letter-spacing:.06em;color:var(--dim);line-height:1.85;position:relative}
-
-  /* ══════════ LÖSUNG ══════════ */
-  .sol{border-top:1px solid var(--edge)}
-  .lead{font-family:var(--S);font-style:italic;font-size:clamp(24px,3.2vw,42px);line-height:1.25;max-width:22ch;margin-bottom:46px}
-  .lead .g{font-family:var(--D);font-style:normal;font-weight:800;font-variation-settings:'wdth' 84;
-    background:linear-gradient(96deg,var(--hot),var(--mag));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .duo{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(28px,4vw,64px);align-items:start}
-  @media(max-width:960px){.duo{grid-template-columns:1fr}}
-  .st{display:grid;grid-template-columns:auto 1fr;gap:18px;margin-bottom:28px}
-  .st .n{font-family:var(--M);font-size:10.5px;color:var(--emb);letter-spacing:.14em;padding-top:5px}
-  .st h3{font-size:18px;font-weight:700;margin-bottom:5px}
-  .st p{font-size:15.5px;color:var(--mut);line-height:1.6}
-  .brief{border:1px solid var(--edge);background:var(--deep)}
-  .btop{display:flex;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--edge);
-    font-family:var(--M);font-size:9.5px;letter-spacing:.14em;color:var(--dim)}
-  .bit{padding:17px 18px;border-bottom:1px solid var(--edge);cursor:pointer;transition:background .25s}
-  .bit:hover{background:#0e1119} .bit:last-of-type{border-bottom:none}
-  .bl{display:flex;align-items:baseline;gap:12px}
-  .bl .nm{font-weight:700;font-size:15.5px} .bl .tg{font-family:var(--M);font-size:9px;letter-spacing:.12em;color:var(--hot);margin-left:auto}
-  .bw{font-size:14px;color:var(--mut);margin-top:5px} .bw q{font-family:var(--S);font-style:italic;color:var(--ink);quotes:"„" "“"}
-  .bd{display:none;margin-top:13px;padding:14px 16px;background:#10131b;border-left:2px solid var(--hot)}
-  .bd p{font-family:var(--S);font-style:italic;font-size:16.5px;line-height:1.55}
-  .bd .a{font-family:var(--M);font-size:9px;letter-spacing:.14em;color:var(--dim);margin-top:12px}
-  .bit.open .bd{display:block;animation:f .3s ease}
-  @keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-  .btap{font-family:var(--M);font-size:9px;letter-spacing:.14em;color:var(--dim);margin-top:9px}
-  .bfoot{padding:13px 18px;font-family:var(--M);font-size:9.5px;letter-spacing:.1em;color:var(--mut);border-top:1px solid var(--edge)}
-
-  /* ══════════ PRINZIP + CTA ══════════ */
-  .close{border-top:1px solid var(--edge)}
-  .wall{font-family:var(--S);font-style:italic;font-size:clamp(25px,3.6vw,46px);line-height:1.25;max-width:20ch;margin-bottom:18px}
-  .wall .g{background:linear-gradient(96deg,var(--hot),var(--mag));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .small{color:var(--mut);max-width:50ch;margin-bottom:52px}
-  .ctarow{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,64px);align-items:end}
-  @media(max-width:880px){.ctarow{grid-template-columns:1fr;gap:34px}}
-  .ctarow p{color:var(--mut);max-width:44ch;margin-top:14px} .ctarow p b{color:var(--ink);font-weight:600}
-  form .r{display:flex;gap:8px} @media(max-width:520px){form .r{flex-direction:column}}
-  form input{flex:1;background:var(--deep);border:1px solid var(--edge);color:var(--ink);
-    font-family:var(--D);font-size:16px;padding:17px 18px}
-  form input:focus{outline:none;border-color:var(--hot)}
-  form input::placeholder{color:var(--dim)}
-  form button{border:none;cursor:pointer;color:#1a0c06;font-family:var(--D);font-weight:700;font-size:16px;
-    padding:17px 28px;white-space:nowrap;background:linear-gradient(100deg,var(--hot),var(--emb));transition:filter .16s}
-  form button:hover{filter:brightness(1.15)}
-  .fine{margin-top:13px;font-family:var(--M);font-size:10px;letter-spacing:.08em;color:var(--dim);line-height:1.9}
-  .done{display:none;border-left:2px solid var(--hot);padding:18px 22px;background:var(--deep)}
-  .done.show{display:block} .done .t{font-family:var(--S);font-style:italic;font-size:23px;margin-bottom:6px}
-  .done p{color:var(--mut);font-size:15px;margin:0}
-
-  footer{border-top:1px solid var(--edge);padding:22px 0 52px;font-family:var(--M);
-    font-size:10px;letter-spacing:.08em;color:var(--dim);line-height:2.2}
-  footer a{color:var(--mut);text-decoration:none;border-bottom:1px solid var(--edge)}
-  footer a:hover{color:var(--hot)}
-
-  .rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
-  .rv.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}*{transition:none!important;animation:none!important}}
+  body{background:#fff;color:#101010;font-family:'Bricolage Grotesque',sans-serif;font-variation-settings:'wdth' 100;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;text-wrap:pretty}
+  ::selection{background:#101010;color:#fff}
+  :focus-visible{outline:2px solid #e02b1d;outline-offset:2px}
+  a{color:#101010;text-decoration:none}
+  a:hover{color:#e02b1d}
+  @keyframes ein{from{opacity:0}to{opacity:1}}
+  @keyframes hoch{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .hoch{animation:hoch .4s ease}
+  .knopf-d{background:#101010;color:#fff;font-weight:600;font-size:17px;padding:16px 30px;border-radius:8px;transition:background .16s;display:inline-block}
+  .knopf-d:hover{background:#e02b1d;color:#fff}
+  .knopf-h{background:none;color:#101010;border:1px solid #101010;border-radius:8px;font-family:inherit;font-weight:600;font-size:16px;padding:15px 24px;white-space:nowrap;transition:all .16s;cursor:pointer}
+  .knopf-h:hover{background:#101010;color:#fff}
+  .feld{flex:1;min-width:200px;background:none;border:1px solid #d8d5d1;border-radius:8px;color:#101010;font-family:inherit;font-size:16px;padding:15px 16px}
+  .feld:focus{outline:none;border-color:#101010}
+  #derName{background:none;border:none;border-bottom:2px solid #d8d5d1;color:#101010;font-family:inherit;font-size:clamp(24px,3vw,36px);font-weight:700;letter-spacing:-.02em;padding:4px 2px 8px;width:min(300px,100%)}
+  #derName:focus{outline:none;border-bottom-color:#e02b1d}
+  .pkt{position:absolute;top:60px;transform:translate(-50%,-50%);border-radius:50%;background:#e02b1d;border:2px solid #fff;cursor:pointer;padding:0;transition:border-color .16s}
+  .pkt:hover{border-color:#101010}
+  .zeile{padding:15px 0;border-top:1px solid #e6e4e1;font-size:16px}
+  .zeile:last-of-type{border-bottom:1px solid #e6e4e1}
+  .zeile b{font-weight:600}
+  .zeile span{color:#6b6864}
+  @media(max-width:900px){
+    [data-grid]{grid-template-columns:1fr!important;gap:24px!important}
+    [data-grid]>*{grid-column:auto!important;padding-top:0!important;padding-bottom:0!important}
+    .tafel-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+    .tafel-inner{min-width:520px}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <nav><span class="lg"><i></i>INFRARED</span><span>WARTELISTE — 5 PLÄTZE</span></nav>
+<div style="max-width:1160px;margin:0 auto;padding:0 clamp(20px,4vw,52px)">
 
-  <!-- ═══ HERO + SIGNATUR ═══ -->
-  <section class="hero">
-    <div class="kick">FÜR COACHES UND BERATER, DIE ÜBER DMS VERKAUFEN</div>
-    <h1>Jeden Monat kauft jemand woanders, <span class="l">der dich zuerst gefragt hat.</span></h1>
-    <p class="sub">Er hat nicht Nein gesagt. Er hat gefragt, was es kostet — und deine Antwort kam zwei Tage zu spät. <b>Das Bitterste: Du erfährst nie, dass es passiert ist.</b></p>
-    <p class="wedge">Kein wichtiger Kontakt fällt dir mehr durchs Raster — <b>und jede Nachricht schreibst du selbst.</b></p>
-    <div class="herocta">
-      <a href="#platz" class="cta-btn" id="heroCta">Platz sichern</a>
-      <span class="cta-note">5 Plätze · kostenlos · ich melde mich persönlich</span>
+  <header style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 0">
+    <span style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:-.01em"><i style="width:7px;height:7px;background:#e02b1d;border-radius:50%"></i>Infrared</span>
+    <span style="font-size:14.5px;color:#6b6864"><span data-frei>5</span> von <span data-plaetze>5</span> Plätzen frei</span>
+  </header>
+
+  <!-- ══ 1 · DER HAKEN ══ -->
+  <section style="padding:clamp(30px,5vw,68px) 0 clamp(36px,5vw,72px)">
+    <p style="font-size:15.5px;color:#6b6864;margin-bottom:clamp(20px,3vw,32px);max-width:56ch">Für Coaches und Berater, die über Instagram-DMs verkaufen. Angebot ab 1.000 €, kein Setter, keiner der die Anfragen für dich vorsortiert.</p>
+
+    <div data-grid style="display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(20px,3vw,40px);align-items:end">
+      <h1 style="grid-column:span 8;font-weight:700;font-variation-settings:'wdth' 79;font-size:clamp(40px,6.8vw,98px);line-height:.95;letter-spacing:-.035em;max-width:17ch">Gerade wartet jemand auf eine Antwort von dir. Du weißt nur nicht, wer.</h1>
+      <div style="grid-column:span 4;padding-bottom:6px;font-size:17px;color:#3d3b38">
+        <p>Gestern Abend kamen vierunddreißig Antworten auf deine Story. Sechsundzwanzig davon waren ein Emoji. Zwei waren Geld.</p>
+        <p style="margin-top:14px">Eine hast du beantwortet, weil sie oben lag. Bei der anderen dachtest du: morgen, in Ruhe.</p>
+        <p style="margin-top:14px;color:#e02b1d">Am Sonntag weißt du, dass eine echte dabei war. Nur nicht mehr, welche.</p>
+      </div>
     </div>
 
-    <div class="scope" id="scope">
-      <div class="scope-top"><span>POSTFACH · LETZTE 90 TAGE</span><span class="r" id="scopeState">ZIEH DEN GRIFF →</span></div>
-      <div class="stage" id="stage">
-        <!-- LINKS: wie du es siehst -->
-        <div class="layer plain">
-          <div class="rowlist">
-            <div class="row"><span class="nm" id="pName">sandra.k</span><span class="txt" id="pTxt">Was kostet dein 1:1 eigentlich? Klingt gena…</span><span class="meta">12 T</span></div>
-            <div class="row"><span class="nm">marco_baut</span><span class="txt">Mega Gespräch! Meld dich nach meinem Urla…</span><span class="meta">3 W</span></div>
-            <div class="row"><span class="nm">jule.coacht</span><span class="txt">Genau mein Thema gerade 😩 Wie läuft das…</span><span class="meta">1 T</span></div>
-            <div class="row"><span class="nm">melanie</span><span class="txt">Du: Schreib ich dir heute Abend in Ruhe ✍️</span><span class="meta">12 T</span></div>
-            <div class="row"><span class="nm">nico.h</span><span class="txt">Danke für den Tipp! 🙏</span><span class="meta">5 T</span></div>
+    <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:clamp(26px,3.4vw,42px)">
+      <a href="#platz" class="knopf-d" id="heroCta">Ich zeig dir, wer wartet — kostenlos</a>
+      <span style="display:inline-flex;align-items:center;gap:9px;font-size:15px;color:#101010"><i style="width:8px;height:8px;border-radius:50%;background:#e02b1d;flex:none"></i><b style="font-weight:600"><span data-frei>5</span> von <span data-plaetze>5</span> Plätzen frei</b></span>
+      <span style="font-size:14.5px;color:#6b6864;max-width:36ch">Ich mache jeden Befund selbst. Mehr als fünf schaffe ich nebenbei nicht.</span>
+    </div>
+
+    <div style="margin-top:clamp(30px,4vw,52px);padding-top:26px;border-top:1px solid #e6e4e1">
+      <label for="derName" style="display:block;font-size:clamp(19px,2.2vw,25px);font-weight:600;letter-spacing:-.015em;max-width:34ch">Wem hast du zuletzt gesagt „ich melde mich" — und es nicht getan?</label>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:16px">
+        <input id="derName" type="text" maxlength="18" placeholder="Vorname genügt" autocomplete="off" spellcheck="false">
+        <span style="font-size:14px;color:#9a9793;max-width:32ch">Bleibt in deinem Browser. Wird nicht verschickt, nirgends gespeichert.</span>
+      </div>
+      <p id="nameDa" style="display:none;font-size:17.5px;margin-top:20px;max-width:56ch">Gut. <b style="font-weight:600" data-name>Lisa</b> steht unten in der Liste, die ich dir schicken würde. Zusammen mit den anderen, an die du gerade nicht denkst — und das sind die teuren.</p>
+      <p id="nameLeer" style="font-size:16px;color:#9a9793;margin-top:20px;max-width:56ch">Wenn dir gerade niemand einfällt, ist das keine gute Nachricht. Es heißt nur, dass du es nicht weißt.</p>
+    </div>
+  </section>
+
+  <!-- ══ 2 · WAS ICH MACHE ══ -->
+  <section style="padding:clamp(40px,5vw,76px) 0;border-top:1px solid #e6e4e1">
+    <div data-grid style="display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(20px,3vw,40px);align-items:end">
+      <h2 style="grid-column:span 7;font-weight:700;font-variation-settings:'wdth' 82;font-size:clamp(28px,4.2vw,56px);line-height:1;letter-spacing:-.03em;max-width:17ch">Du schickst mir 90 Tage Chats. Ich schicke dir eine Liste mit Namen.</h2>
+      <p style="grid-column:span 5;font-size:16.5px;color:#6b6864;padding-bottom:6px">Kein Tool, das du einrichten musst. Kein Zugriff auf dein Konto. Du drückst in Instagram und WhatsApp je einen Knopf, leitest mir die Datei weiter, und bekommst innerhalb von zwei Tagen zurück, wer bei dir gerade wartet — mit dem wörtlichen Satz aus dem Chat daneben.</p>
+    </div>
+
+    <div style="border:1px solid #e6e4e1;border-radius:12px;overflow:hidden;margin-top:clamp(24px,3vw,38px)">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:13px 18px;border-bottom:1px solid #e6e4e1;background:#fcfbfa">
+        <span style="display:flex;align-items:center;gap:7px;font-weight:700;font-size:13.5px"><i style="width:6px;height:6px;background:#e02b1d;border-radius:50%"></i>Deine Liste</span>
+        <span style="font-size:13px;color:#6b6864">letzte 90 Tage · 312 Gespräche gelesen</span>
+        <span style="margin-left:auto;font-size:13px;color:#6b6864">offen: <b style="color:#e02b1d;font-weight:600">7.200 €</b> an Angeboten, die du schon gemacht hast</span>
+      </div>
+
+      <div style="padding:20px 18px 6px">
+        <b style="font-size:15px">Wer wie lange auf dich wartet</b>
+        <p style="font-size:13px;color:#6b6864;margin-top:2px;max-width:70ch">Nicht nach Verkaufsphase sortiert, sondern nach Zeit. Links liegt, was am längsten liegt. Die Größe zeigt, wie viel Geld daran hängt.</p>
+        <div class="tafel-scroll">
+        <div class="tafel-inner" id="tafel" style="position:relative;height:112px;margin-top:22px">
+          <div style="position:absolute;left:0;top:44px;width:76.3%;height:32px;background:#fdf2f1;border-radius:4px 0 0 4px"></div>
+          <div style="position:absolute;left:0;right:0;top:60px;height:1px;background:#e6e4e1"></div>
+          <div style="position:absolute;left:76.3%;top:30px;bottom:20px;width:2px;background:#101010"></div>
+          <div style="position:absolute;left:76.3%;top:8px;transform:translateX(-50%);font-size:12px;font-weight:600">heute</div>
+          <div style="position:absolute;left:0;top:88px;font-size:11.5px;color:#9a9793">vor 45 Tagen</div>
+          <div style="position:absolute;right:0;top:88px;font-size:11.5px;color:#9a9793">in 14 Tagen</div>
+          <button type="button" class="pkt" data-p="tobias" style="left:11.9%;width:13px;height:13px" aria-label="Tobias"></button>
+          <span style="position:absolute;left:11.9%;top:28px;transform:translateX(-50%);font-size:11.5px;color:#6b6864;white-space:nowrap">Tobias</span>
+          <button type="button" class="pkt" data-p="melanie" style="left:52.5%;width:17px;height:17px" aria-label="Melanie"></button>
+          <span style="position:absolute;left:52.5%;top:26px;transform:translateX(-50%);font-size:11.5px;color:#6b6864;white-space:nowrap">Melanie</span>
+          <button type="button" class="pkt" data-p="sandra" style="left:55.9%;width:17px;height:17px;border-color:#101010" aria-label="Deine Person"></button>
+          <span style="position:absolute;left:55.9%;top:78px;transform:translateX(-50%);font-size:11.5px;font-weight:600;white-space:nowrap" data-name>Lisa</span>
+          <button type="button" class="pkt" data-p="marco" style="left:61%;width:24px;height:24px" aria-label="Marco"></button>
+          <span style="position:absolute;left:62.5%;top:24px;transform:translateX(-50%);font-size:11.5px;color:#6b6864;white-space:nowrap">Marco · 4.800 €</span>
+          <button type="button" class="pkt" data-p="jule" style="left:74.6%;width:12px;height:12px" aria-label="Jule"></button>
+          <span style="position:absolute;left:74.6%;top:78px;transform:translateX(-50%);font-size:11.5px;color:#6b6864;white-space:nowrap">Jule</span>
+          <span style="position:absolute;left:81.4%;top:60px;transform:translate(-50%,-50%);width:15px;height:15px;border-radius:50%;background:#cfccc8;border:2px solid #fff"></span>
+          <span style="position:absolute;left:86.4%;top:60px;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:#cfccc8;border:2px solid #fff"></span>
+        </div>
+        </div>
+        <p style="font-size:12px;color:#9a9793;margin-top:6px">Rot heißt überfällig. Grau heißt: kommt noch, du bist nicht dran. 41 weitere Gespräche haben nichts Offenes und stehen deshalb nicht auf der Tafel.</p>
+      </div>
+
+      <div style="border-top:1px solid #e6e4e1;margin-top:16px;padding:20px 18px 24px">
+        <div style="display:flex;align-items:center;gap:11px;flex-wrap:wrap">
+          <span id="avatar" style="width:36px;height:36px;border-radius:50%;background:#d9cec2;color:#4a4136;display:grid;place-items:center;font-size:13px;font-weight:600">L</span>
+          <div>
+            <b style="font-size:18px;letter-spacing:-.015em" id="pName">Lisa</b>
+            <div style="font-size:13px;color:#e02b1d;font-weight:600" id="pSchuld"></div>
+          </div>
+          <div style="margin-left:auto;text-align:right">
+            <div style="font-size:20px;font-weight:700;letter-spacing:-.02em;color:#e02b1d;white-space:nowrap" id="pBetrag"></div>
+            <div style="font-size:12px;color:#9a9793" id="pBetragNote"></div>
           </div>
         </div>
-        <!-- RECHTS: wie Infrared es sieht -->
-        <div class="layer therm" id="therm">
-          <div class="rowlist">
-            <div class="row r1"><span class="nm" id="tName">Sandra K.</span><span class="why" id="tWhy">Preisfrage offen — <q>klingt genau nach dem, was ich brauche</q></span><span class="sig s-a" id="tSig">PREISFRAGE OFFEN</span></div>
-            <div class="row r2"><span class="nm">Marco B.</span><span class="why">Sein <q>meld dich nach dem Urlaub</q> ist seit 3 Wochen fällig</span><span class="sig s-a">ZUSAGE ÜBERFÄLLIG</span></div>
-            <div class="row r3"><span class="nm">Jule</span><span class="why">Story-Antwort gestern 21:14 — Fenster offen</span><span class="sig s-b">FRAGE UNBEANTWORTET</span></div>
-            <div class="row r4"><span class="nm">Melanie</span><span class="why"><q>Heute Abend</q> — dein Wort, seit 12 Tagen offen</span><span class="sig s-a">DEIN WORT OFFEN</span></div>
-            <div class="row r5"><span class="nm">Nico H.</span><span class="why">Kein offener Faden — alles erledigt</span><span class="sig s-c">NICHTS OFFEN</span></div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-top:20px">
+          <div>
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap"><b style="font-size:14.5px">Der Puls eures Gesprächs</b><span style="font-size:12px;color:#9a9793">Nachrichten pro Woche</span></div>
+            <div id="ekg" style="display:flex;align-items:flex-end;gap:5px;height:60px;margin-top:10px"></div>
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;color:#9a9793;margin-top:5px"><span>vor 12 Wochen</span><span id="puls" style="color:#e02b1d"></span><span>heute</span></div>
+          </div>
+          <div>
+            <b style="font-size:14.5px">Was offen ist</b>
+            <p style="font-size:13.5px;color:#6b6864;margin-top:7px" id="pOffen"></p>
+            <div style="margin-top:9px;font-size:13.5px;font-style:italic">„<span id="pZitat"></span>"</div>
+            <p style="font-size:12px;color:#9a9793;margin-top:8px">Der Satz kommt aus deiner Datei, nicht von der KI. Ohne Satz kommt niemand auf die Liste.</p>
+          </div>
+          <div>
+            <b style="font-size:14.5px">Was schon drinsteckt</b>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 10px;margin-top:8px;font-size:13.5px" id="invest"></div>
+            <p style="font-size:12.5px;color:#9a9793;margin-top:8px">Diese Arbeit ist gemacht. Sie verfällt, wenn nichts passiert.</p>
           </div>
         </div>
-        <div class="lbl left">SO SIEHST DU ES</div>
-        <div class="lbl right">SO SIEHT INFRARED ES</div>
-        <div class="siglegend">KEIN PUNKTESYSTEM · DREI PRÜFBARE SIGNALE: OFFENE ZUSAGE · UNBEANTWORTETE FRAGE · KAUFABSICHT BELEGT</div>
-        <div class="handle" id="handle"><div class="knob"></div></div>
-        <div class="hint-drag" id="hintDrag">ZIEH DEN GRIFF NACH LINKS</div>
       </div>
     </div>
-    <div class="mine rv">
-      <label for="myName">Wie heißt jemand, der gerade auf eine Antwort von dir wartet?</label>
-      <input id="myName" type="text" maxlength="24" placeholder="Vorname genügt" autocomplete="off" spellcheck="false">
-      <div class="note">BLEIBT IN DEINEM BROWSER · WIRD NICHT GESENDET · KEINE SCHATTENPROFILE</div>
+
+    <div data-grid style="display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(20px,3vw,40px);margin-top:clamp(24px,3vw,38px)">
+      <div style="grid-column:span 4"><b style="font-size:17px">Dein Aufwand: vier Minuten</b><p style="font-size:15.5px;color:#6b6864;margin-top:6px">Zwei Knöpfe drücken, eine Mail weiterleiten. Einmalig. Den Rest mache ich.</p></div>
+      <div style="grid-column:span 4"><b style="font-size:17px">Mein Aufwand: ein Abend</b><p style="font-size:15.5px;color:#6b6864;margin-top:6px">Ich lese jedes Gespräch durch, das der Rechner markiert, und werfe raus, was wackelt. Lieber fünf sichere Fälle als fünfzehn halbe.</p></div>
+      <div style="grid-column:span 4"><b style="font-size:17px">Dein Ergebnis: Namen</b><p style="font-size:15.5px;color:#6b6864;margin-top:6px">Menschen, ihr Satz, was offen ist, ein fertiger Vorschlag. Danach dreißig Minuten am Telefon, wenn du magst.</p></div>
     </div>
   </section>
 
-  <!-- ═══ AGITATE ═══ -->
-  <div class="agit">
-    <div class="ag rv"><q>Was kostet dein 1:1 eigentlich?</q><div class="m">@SANDRA.K · VOR 12 TAGEN · UNGELESEN</div><p class="o">Sie hat nicht nachgehakt. <b>Sie hat woanders gefragt.</b></p></div>
-    <div class="ag rv"><q>Meld dich nach meinem Urlaub, dann machen wir das klar.</q><div class="m">@MARCO_BAUT · 90 MIN NACH DEINEM ANGEBOT</div><p class="o">Sein Urlaub war vor drei Wochen. <b>Niemand hat sich gemeldet.</b></p></div>
-    <div class="ag rv"><q>Schreib ich dir heute Abend in Ruhe.</q><div class="m">DEINE LETZTE NACHRICHT AN @MELANIE</div><p class="o">Nicht sie ist abgesprungen. <b>Dein Wort ist es.</b></p></div>
-  </div>
-
-  <!-- ═══ ERINNERUNGS-TEST ═══ -->
-  <section class="band recall">
-    <div class="eyeb rv">ZWEI FRAGEN AN DICH</div>
-    <h2 class="rv" style="margin-bottom:8px">Du musst nichts rechnen. Nur nachsehen, ob du es weißt.</h2>
-
-    <div class="rq rv">
-      <div class="qn">01</div>
-      <h3>Wem hast du zuletzt gesagt: „Ich melde mich"?</h3>
-      <div class="ropts" id="rq1">
-        <button class="ropt" data-v="weiss" type="button">Ich weiß genau, wer das war</button>
-        <button class="ropt" data-v="unklar" type="button">Fällt mir gerade keiner ein</button>
+  <!-- ══ 3 · FÜR WEN NICHT ══ -->
+  <section style="padding:clamp(40px,5vw,76px) 0;border-top:1px solid #e6e4e1">
+    <div data-grid style="display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(20px,3vw,40px);align-items:start">
+      <div style="grid-column:span 5">
+        <h2 style="font-weight:700;font-variation-settings:'wdth' 82;font-size:clamp(28px,4.2vw,56px);line-height:1;letter-spacing:-.03em;max-width:15ch">Ich nehme fünf. Also sage ich vier Sorten Leuten ab.</h2>
+        <p style="font-size:16px;color:#6b6864;margin-top:18px;max-width:40ch">Nicht aus Koketterie. Ich mache jeden Befund selbst, und bei den Falschen finde ich nichts — dann haben wir beide Zeit verloren.</p>
       </div>
-      <div class="rout" id="ro1"><p id="ro1t"></p><p class="sm" id="ro1s"></p></div>
-    </div>
-
-    <div class="rq rv">
-      <div class="qn">02</div>
-      <h3>Wann hat dich zuletzt jemand nach dem Preis gefragt?</h3>
-      <div class="ropts" id="rq2">
-        <button class="ropt" data-v="heute" type="button">Heute</button>
-        <button class="ropt" data-v="woche" type="button">Diese Woche</button>
-        <button class="ropt" data-v="laenger" type="button">Länger her</button>
-        <button class="ropt" data-v="unklar" type="button">Weiß ich nicht mehr</button>
-      </div>
-      <div class="rout" id="ro2"><p id="ro2t"></p><p class="sm" id="ro2s"></p></div>
-    </div>
-  </section>
-
-  <!-- ═══ RECHNER ═══ -->
-  <section class="band">
-    <div class="eyeb rv">DEIN LECK</div>
-    <h2 class="rv">Deine Zahlen. Deine Annahmen. Dann weißt du, worüber wir reden.</h2>
-    <div class="calc">
-      <div class="rv">
-        <div class="qlab">01 — WAS KOSTET DEIN ANGEBOT?</div>
-        <div class="opts" id="priceOpts">
-          <button class="opt" data-v="1000" type="button">~1.000 €</button>
-          <button class="opt" data-v="2500" type="button">~2.500 €</button>
-          <button class="opt" data-v="5000" type="button">~5.000 €</button>
-          <button class="opt" data-v="10000" type="button">10.000 €+</button>
-        </div>
-        <div class="qlab">02 — WIE VIELE ECHTE KAUFANFRAGEN IM MONAT?</div>
-        <div class="opts" id="dmOpts">
-          <button class="opt" data-v="6" type="button">Unter 10</button>
-          <button class="opt" data-v="20" type="button">10 – 30</button>
-          <button class="opt" data-v="50" type="button">30 – 80</button>
-          <button class="opt" data-v="100" type="button">Über 80</button>
-        </div>
-        <p class="qhint">Gemeint sind Menschen, die nach Preis, Ablauf oder Termin fragen — nicht jede DM.</p>
-        <div class="qlab" style="margin-top:8px">03 — DIE ANNAHMEN. ÄNDER SIE.</div>
-        <div class="knobs">
-          <label>Ohne nächsten Schritt versandet
-            <span><input id="kNoStep" type="number" min="0" max="100" step="5" value="35"> %</span></label>
-          <label>Davon hättest du abgeschlossen
-            <span><input id="kClose" type="number" min="0" max="100" step="5" value="30"> %</span></label>
-        </div>
-        <p class="qhint">Für diese beiden Zahlen gibt es keine unabhängige Studie — auch nicht bei den Anbietern, die damit werben. Setz deine eigenen ein.</p>
-        <p style="font-family:var(--M);font-size:10px;letter-spacing:.08em;color:var(--dim);line-height:1.9;margin-top:14px">
-          KEINE E-MAIL NÖTIG · ERGEBNIS SOFORT · FORMEL OFFEN
-        </p>
-      </div>
-      <div class="meter rv" id="meter">
-        <div class="mtop"><span>SCHÄTZUNG · DEIN POSTFACH</span><span id="mState">WARTE AUF EINGABE</span></div>
-        <div class="mbody">
-          <div class="mlab">LIEGT PRO MONAT UNBEARBEITET IN DEINEN CHATS</div>
-          <div class="mnum" id="num">—</div>
-          <div class="munit" id="unit">WÄHLE LINKS ZWEI ANGABEN</div>
-          <p class="mverd" id="verdict">Die meisten unterschätzen diese Zahl deutlich — verlorene Gespräche beschweren sich nicht.</p>
-        </div>
-        <div class="mfine" id="formula">FORMEL: KAUFANFRAGEN/MONAT × % OHNE NÄCHSTEN SCHRITT × % ABSCHLUSS × DEIN PREIS · ALLE ANNAHMEN LINKS ÄNDERBAR</div>
+      <div style="grid-column:span 7">
+        <div class="zeile"><b>Du hast ein Setter-Team.</b> <span>Dann ist dein Engpass nicht das Erinnern, sondern die Übergabe. Schreib mir trotzdem, dafür bauen wir später etwas.</span></div>
+        <div class="zeile"><b>Du verkaufst über einen Shop.</b> <span>Da gibt es kein Gespräch, das man vergessen kann.</span></div>
+        <div class="zeile"><b>Dir fehlt Reichweite.</b> <span>Infrared holt niemanden neu rein. Es holt nur die zurück, die schon mal da waren. Bei drei Anfragen im Monat lohnt das nicht.</span></div>
+        <div class="zeile"><b>Du willst, dass eine KI für dich antwortet.</b> <span>Das ist genau das, was ich nicht baue. Es gibt genug Anbieter dafür, und sie sind billiger.</span></div>
+        <p style="font-size:16px;margin-top:22px;max-width:52ch">Bleibt: jemand mit einem Angebot ab 1.000 €, mehreren echten Anfragen am Tag, und dem Gefühl, dass regelmäßig etwas liegen bleibt. <b style="font-weight:600">Wenn du das bist, sind wir hier fertig — schreib mir.</b></p>
       </div>
     </div>
   </section>
 
-  <!-- ═══ LÖSUNG ═══ -->
-  <section class="band sol">
-    <p class="lead rv">Infrared holt dir diese Gespräche zurück — <span class="g">bevor sie sterben.</span></p>
-    <div class="duo">
-      <div class="rv">
-        <div class="st"><div class="n">01</div><div><h3>Du verbindest deine Chats</h3><p>Instagram- und WhatsApp-Verläufe, von dir exportiert. Kein Scraping, kein Zugriff auf dein Konto, keine fremden Daten.</p></div></div>
-        <div class="st"><div class="n">02</div><div><h3>Infrared vergisst nichts</h3><p>Jede Zusage, jede offene Preisfrage, jedes „meld dich nach dem Urlaub" — mit dem Zitat aus dem echten Chat als Beleg.</p></div></div>
-        <div class="st"><div class="n">03</div><div><h3>Dein Erstbefund: Menschen, die auf dich warten</h3><p>Wir analysieren deine letzten 90 Tage. Du bekommst konkrete Namen, Zitate und Entwürfe — ein zitierbarer Befund, kein vages Dashboard.</p></div></div>
+  <!-- ══ 4 · WER ICH BIN ══ -->
+  <section style="background:#101010;color:#fff;border-radius:16px;padding:clamp(32px,4.5vw,60px) clamp(24px,3.5vw,52px);margin:clamp(40px,5vw,72px) 0">
+    <div data-grid style="display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(20px,3vw,40px);align-items:start">
+      <div style="grid-column:span 6">
+        <h2 style="font-weight:700;font-variation-settings:'wdth' 82;font-size:clamp(26px,3.6vw,46px);line-height:1.02;letter-spacing:-.03em;max-width:18ch">Ich bin Tim. Ich habe null Kunden, und das ist der Grund, warum es kostenlos ist.</h2>
+        <div style="display:flex;align-items:flex-end;gap:18px;margin-top:26px;flex-wrap:wrap">
+          <!-- FOTO AUSGEBLENDET, 10.08.2026.
+               tim.png (760x936) enthaelt nur die obersten ~255 px Bildinhalt:
+               Haaransatz bis Augenbrauen, dann bricht der Freisteller hart ab.
+               Der Rest der Leinwand ist vollstaendig transparent (auf weissem,
+               grauem und schwarzem Grund gleichermassen geprueft).
+               Ein angeschnittener Kopf beschaedigt genau den Block, der
+               Vertrauen herstellen soll — deshalb lieber kein Bild als dieses.
+               Zum Aktivieren: neue Datei nach tim.png legen, Zeile einkommentieren,
+               width/height auf die echten Masse setzen.
+          <img src="tim.png" alt="Tim, Gründer von Infrared" width="760" height="936" loading="lazy" style="width:min(240px,52vw);height:auto;display:block">
+          -->
+          <div style="font-size:14.5px;color:#8f8c88">
+            <div style="color:#fff;font-size:16px;font-weight:600">Tim</div>
+            <div>baut Infrared, öffentlich</div>
+          </div>
+        </div>
       </div>
-      <div class="brief rv">
-        <div class="btop"><span>DEIN ERSTBEFUND (SO SIEHT ER AUS)</span><span>TIPPEN FÜR ENTWURF</span></div>
-        <div class="bit" data-open tabindex="0" role="button">
-          <div class="bl"><span class="nm">Sandra K.</span><span class="tg">PREISFRAGE · 12 TAGE</span></div>
-          <p class="bw">Sie fragte <q>was kostet dein 1:1</q> — du sagtest <q>heute Abend</q>.</p>
-          <div class="bd"><p>„Sandra, deine Frage ist bei mir untergegangen — mein Fehler. Das 1:1 startet bei X. Erzähl kurz, wo du stehst, dann sag ich dir ehrlich, ob es passt."</p><div class="a">[ SENDEN ] [ ANPASSEN ] [ HEUTE NICHT ]</div></div>
-          <div class="btap">▸ ENTWURF ANSEHEN</div>
-        </div>
-        <div class="bit" data-open tabindex="0" role="button">
-          <div class="bl"><span class="nm">Marco B.</span><span class="tg">FÄLLIG SEIT 3 WOCHEN</span></div>
-          <p class="bw">Sein <q>meld dich nach dem Urlaub</q> ist überfällig.</p>
-          <div class="bd"><p>„Marco! Urlaub gut überstanden? Du wolltest danach durchstarten — steht das noch? Sag ruhig ehrlich, wenn sich was geändert hat."</p><div class="a">[ SENDEN ] [ ANPASSEN ] [ HEUTE NICHT ]</div></div>
-          <div class="btap">▸ ENTWURF ANSEHEN</div>
-        </div>
-        <div class="bit" data-open tabindex="0" role="button">
-          <div class="bl"><span class="nm">Jule</span><span class="tg">FENSTER OFFEN</span></div>
-          <p class="bw">Story-Antwort gestern 21:14 — <q>genau mein Thema</q>.</p>
-          <div class="bd"><p>„Jule, hab deine Antwort gesehen — was heißt ‚genau mein Thema' bei dir gerade konkret?"</p><div class="a">[ SENDEN ] [ ANPASSEN ] [ HEUTE NICHT ]</div></div>
-          <div class="btap">▸ ENTWURF ANSEHEN</div>
-        </div>
-        <div class="bfoot">LETZTE 90 TAGE: 14 OFFENE ZUSAGEN · 3 PREISFRAGEN UNBEANTWORTET</div>
+      <div style="grid-column:span 6;font-size:16.5px;color:#b4b1ad">
+        <p>Ich baue Infrared öffentlich, seit ein paar Wochen. Es gibt keine Firma dahinter, kein Vertriebsteam, keinen Call-Funnel. Es gibt mich.</p>
+        <p style="margin-top:14px">Der Markt ist verbrannt. Wer schon mal an eine Setter-Agentur geraten ist, glaubt kein Versprechen mehr — zu Recht. Deshalb verspreche ich nur, was ich kontrollieren kann: <b style="color:#fff;font-weight:600">eine Liste mit mindestens fünf belegten Fällen aus deinen echten Chats.</b> Keinen Umsatz, keine Calls, keine Abschlüsse.</p>
+        <p style="margin-top:14px">Die ersten fünf Befunde mache ich umsonst, weil ich sie brauche, um zu lernen. Wenn du danach weitermachen willst, kostet der Pilot 500 € im Monat für drei Monate, und den ersten bekommst du zurück, wenn er dir nichts gebracht hat. Wenn nicht, ist auch gut — dann hast du eine Liste und ich habe was gelernt.</p>
+        <p style="margin-top:14px;color:#fff">Deine Chats gehören dir. Kein Mitlesen, kein automatisches Senden, keine gesammelten Profile. Jede Nachricht an deine Kunden schreibst du selbst.</p>
       </div>
     </div>
   </section>
 
-  <!-- ═══ PRINZIP + CTA ═══ -->
-  <section class="band close">
-    <p class="wall rv">Keine KI schreibt deinen Kunden. <span class="g">Jede Nachricht kommt von dir.</span></p>
-    <p class="small rv">Alle bauen gerade Bots, die für dich antworten. Wir glauben das Gegenteil: Automatisiert wird das Erinnern — niemals die Beziehung.</p>
-    <div class="ctarow">
-      <div class="rv"><h2>Ich suche 5 Coaches für den Anfang.</h2>
-        <p>Wir schauen gemeinsam in deine letzten 90 Tage, und ich zeige dir die Gespräche, in denen jemand auf dich wartet. <b>Wenn's dir nichts bringt, sage ich dir das zuerst.</b></p></div>
-      <div class="rv" id="platz">
-        <form id="wl" novalidate>
-          <div class="r"><input type="email" id="email" placeholder="Deine E-Mail" required autocomplete="email">
-            <button type="submit">Platz sichern</button></div>
-          <p class="fine">KOSTENLOS · KEIN SPAM · JEDERZEIT LÖSCHBAR<br>GEBAUT VON TIM — ÖFFENTLICH, TAG FÜR TAG</p>
-        </form>
-        <div class="done" id="done"><div class="t">Du bist drauf.</div><p>Ich melde mich persönlich, sobald ein Platz frei wird.</p></div>
+  <!-- ══ 5 · DER ASK ══ -->
+  <section id="platz" style="padding:0 0 clamp(46px,6vw,88px)">
+    <div data-grid style="display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(24px,3vw,48px);align-items:start">
+      <div style="grid-column:span 7">
+        <h2 style="font-weight:700;font-variation-settings:'wdth' 82;font-size:clamp(28px,4.2vw,56px);line-height:1;letter-spacing:-.03em;max-width:15ch">Schreib mir. Ein Satz reicht.</h2>
+        <p style="font-size:18px;margin-top:20px;max-width:46ch" id="schluss"></p>
+        <p style="font-size:16px;color:#6b6864;margin-top:16px;max-width:46ch">Am liebsten per DM — da findet dein Verkauf schließlich auch statt. Ich antworte selbst, meistens innerhalb einer Stunde. Wenn nicht, weißt du, dass ich das richtige Produkt baue.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:26px;align-items:center">
+          <a href="https://instagram.com/timfromsachs" target="_blank" rel="noopener" class="knopf-d" id="dmCta">Auf Instagram schreiben</a>
+          <span style="font-size:14.5px;color:#6b6864">@timfromsachs</span>
+        </div>
+      </div>
+      <div style="grid-column:span 5;padding-top:10px">
+        <div id="formBlock">
+          <p style="font-size:15.5px;color:#6b6864;max-width:38ch">Kein Instagram zur Hand? Dann melde ich mich bei dir.</p>
+          <form id="wl" style="margin-top:12px" novalidate>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input type="email" id="email" class="feld" placeholder="Deine E-Mail" required autocomplete="email">
+              <button type="submit" class="knopf-h">Melde dich</button>
+            </div>
+            <p style="font-size:13.5px;color:#9a9793;margin-top:12px">Kein Spam, kein Newsletter, jederzeit löschbar. Ich schreibe dir persönlich oder gar nicht.</p>
+            <p id="fehler" style="display:none;font-size:13.5px;color:#e02b1d;margin-top:8px"></p>
+          </form>
+        </div>
+        <div id="danke" style="display:none">
+          <p style="font-size:22px;font-weight:600">Alles klar.</p>
+          <p style="font-size:16px;color:#6b6864;margin-top:6px">Ich melde mich in den nächsten Tagen persönlich. Wenn es schneller gehen soll, schreib mir einfach auf Instagram.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <footer>
-    <div>INFRARED · KEIN SCRAPING · KEIN AUTO-SEND · KEINE SCHATTENPROFILE</div>
-    <div><a href="https://instagram.com/timfromsachs" target="_blank" rel="noopener">@TIMFROMSACHS</a> · <a href="datenschutz.html">DATENSCHUTZ</a> · <a href="impressum.html">IMPRESSUM</a></div>
+  <footer style="border-top:1px solid #e6e4e1;padding:20px 0 46px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:13.5px;color:#9a9793">
+    <span>Infrared — kein Mitlesen, kein automatisches Senden, keine gesammelten Profile</span>
+    <span><a href="https://instagram.com/timfromsachs" target="_blank" rel="noopener" style="color:#6b6864">@timfromsachs</a> · <a href="datenschutz.html" style="color:#6b6864">Datenschutz</a> · <a href="impressum.html" style="color:#6b6864">Impressum</a></span>
   </footer>
 </div>
 
 <script>
-/* ══════ DIPTYCHON ══════ */
-(function(){
-  const scope=document.getElementById('scope'), stage=document.getElementById('stage'),
-        therm=document.getElementById('therm'), handle=document.getElementById('handle'),
-        state=document.getElementById('scopeState');
-  let split=62, dragging=false, auto=true;
-
-  function set(p){
-    split=Math.max(0,Math.min(100,p));
-    therm.style.setProperty('--split', split+'%');
-    handle.style.left = split+'%';
-    if(split<45) state.textContent='THERMOGRAMM AKTIV';
-    else if(split>85) state.textContent='ZIEH DEN GRIFF →';
-    else state.textContent='SCAN…';
-  }
-  set(62);
-
-  /* sanfter Auto-Schwenk bis zur ersten Berührung */
-  let t0=performance.now();
-  (function idle(t){
-    if(auto){
-      const k=(Math.sin((t-t0)/2600)+1)/2;      // 0..1
-      set(52 + k*22);
-      requestAnimationFrame(idle);
-    }
-  })(t0);
-
-  function pos(e){
-    const r=stage.getBoundingClientRect();
-    const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
-    set(x/r.width*100);
-  }
-  function start(e){ auto=false; scope.classList.add('touched'); dragging=true; pos(e); }
-  function move(e){ if(dragging){ pos(e); e.preventDefault(); } }
-  function end(){ dragging=false; }
-
-  // Schnittstelle nach aussen: Die Namenseingabe muss den Auto-Schwenk
-  // anhalten koennen, sonst schwenkt er ueber den eigenen Namen hinweg.
-  window.__irScope={ set, stop(){ auto=false; scope.classList.add('touched'); } };
-
-  stage.addEventListener('pointerdown', start);
-  addEventListener('pointermove', move, {passive:false});
-  addEventListener('pointerup', end);
-  stage.addEventListener('pointermove', e=>{ if(!dragging && !auto) pos(e); });
-})();
-
-/* ══════ EIGENER NAME IM THERMOGRAMM ══════ */
-(function(){
-  const inp=document.getElementById('myName');
-  const pN=document.getElementById('pName'), pT=document.getElementById('pTxt'),
-        tN=document.getElementById('tName'), tW=document.getElementById('tWhy'),
-        tS=document.getElementById('tSig');
-  const orig={pN:pN.textContent,pT:pT.textContent,tN:tN.textContent,tW:tW.innerHTML,tS:tS.textContent};
-
-  // DER NAME VERLAESST DAS GERAET NIE. Er ist ein personenbezogenes Datum
-  // eines Dritten, der nicht eingewilligt hat — dafuer gibt es keine
-  // Rechtsgrundlage, und „keine Schattenprofile" steht im Footer.
-  // Getrackt wird nur, DASS jemand etwas eingetippt hat.
-  let gemeldet=false, t, aufgezogen=false;
-
-  /* Der Griff faehrt einmal nach links, damit der eigene Name auftaucht.
-     Sanft und nur einmal — danach gehoert die Steuerung wieder dem Leser. */
-  function zieheAuf(){
-    const S=window.__irScope; if(!S) return;
-    S.stop();
-    const th=document.getElementById('therm');
-    const von=parseFloat(getComputedStyle(th).getPropertyValue('--split'))||60, bis=2;
-    const t0=performance.now();
-    (function lauf(now){
-      const k=Math.min(1,(now-t0)/900), e=1-Math.pow(1-k,3);
-      S.set(von+(bis-von)*e);
-      if(k<1) requestAnimationFrame(lauf);
-    })(t0);
-  }
-  function sauber(v){ return v.replace(/[<>&"']/g,'').trim().slice(0,24); }
-
-  inp.addEventListener('input', ()=>{
-    const n=sauber(inp.value);
-    if(n.length>=2){
-      pN.textContent=n.toLowerCase().replace(/\s+/g,'.');
-      pT.textContent='…';
-      tN.textContent=n;
-      tW.innerHTML='Wartet auf deine Antwort — seit du zuletzt geschrieben hast';
-      tS.textContent='DEIN WORT OFFEN';
-      // Den Payoff sichtbar machen: Ohne das steht der eigene Name hinter
-      // dem Vorhang und der Moment „das bin ja ich" faellt aus.
-      if(!aufgezogen){ aufgezogen=true; zieheAuf(); }
-      if(!gemeldet){ gemeldet=true; clearTimeout(t);
-        t=setTimeout(()=>{try{trk('own_name_entered',null,n.length)}catch(e){}},1200); }
-    }else{
-      pN.textContent=orig.pN; pT.textContent=orig.pT;
-      tN.textContent=orig.tN; tW.innerHTML=orig.tW; tS.textContent=orig.tS;
-    }
-  });
-})();
-
-/* ══════ ERINNERUNGS-TEST ══════ */
-(function(){
-  let a1=null, a2=null;
-
-  // Die Befunde. Der harte Fall ist NICHT „du hast jemanden vergessen" —
-  // das weiss niemand. Er ist: du weisst nicht, ob du jemanden vergessen
-  // hast. Das ist nachpruefbar wahr und trifft trotzdem.
-  const T1={
-    weiss:['Dann ist da <b>ein Mensch</b>, an den du gerade denkst.',
-           'Die Frage ist nicht, ob du ihn vergessen hast. Sie ist: Wie viele andere gibt es, an die du gerade nicht denkst?'],
-    unklar:['Genau das ist es.',
-            'Nicht, dass du jemanden vergessen hast — dass du <b>nicht weißt, ob</b> du jemanden vergessen hast. Ein Verlust, den man nicht bemerkt, korrigiert sich nicht von selbst.']
-  };
-  const T2={
-    heute:['Gut. Dann läuft dein Kanal.',
-           'Umso mehr Gespräche laufen, desto mehr laufen auch aus. Die von heute erinnerst du. Die von vor drei Wochen?'],
-    woche:['Diese Woche also.',
-           'Weißt du auch noch, ob du geantwortet hast — und ob danach noch etwas kam?'],
-    laenger:['Länger her.',
-             'Dann ist entweder gerade wenig los, oder die Anfragen kommen und du siehst sie nicht mehr. Das eine ist ein Reichweitenproblem. Das andere nicht.'],
-    unklar:['Das ist die ehrlichste Antwort — und die teuerste.',
-            'Eine Preisfrage ist das deutlichste Kaufsignal, das es gibt. Wenn du nicht weißt, wann die letzte kam, weißt du auch nicht, ob sie beantwortet wurde.']
-  };
-
-  function bind(id, store, texte, outId){
-    const box=document.getElementById(id);
-    box.addEventListener('click', e=>{
-      const b=e.target.closest('.ropt'); if(!b) return;
-      box.querySelectorAll('.ropt').forEach(o=>o.classList.remove('on'));
-      b.classList.add('on');
-      const v=b.dataset.v;
-      store(v);
-      const t=texte[v];
-      document.getElementById(outId+'t').innerHTML=t[0];
-      document.getElementById(outId+'s').innerHTML=t[1];
-      document.getElementById(outId).classList.add('show');
-      try{trk('recall_answer', id+':'+v)}catch(e){}
-      schluss();
-    });
-  }
-  bind('rq1', v=>a1=v, T1, 'ro1');
-  bind('rq2', v=>a2=v, T2, 'ro2');
-
-  // Beide unklar: der Fall, fuer den das Produkt gebaut ist. Wird gemessen,
-  // weil er das staerkste Kaufsignal der Seite ist.
-  function schluss(){
-    if(a1&&a2){
-      try{trk('recall_complete', a1+'/'+a2, (a1==='unklar'?1:0)+(a2==='unklar'?1:0))}catch(e){}
-    }
-  }
-})();
-
-/* ══════ LECK-RECHNER ══════ */
-(function(){
-  let price=null, dms=null;
-  const num=document.getElementById('num'), unit=document.getElementById('unit'),
-        verdict=document.getElementById('verdict'), state=document.getElementById('mState'),
-        formula=document.getElementById('formula'), meter=document.getElementById('meter');
-
-  function pick(id, cb){
-    document.getElementById(id).addEventListener('click', e=>{
-      const b=e.target.closest('.opt'); if(!b) return;
-      document.getElementById(id).querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));
-      b.classList.add('on'); cb(+b.dataset.v); render();
-    });
-  }
-  pick('priceOpts', v=>price=v); pick('dmOpts', v=>dms=v);
-
-  function count(to){
-    const s=performance.now(), d=1000;
-    (function f(t){
-      const p=Math.min(1,(t-s)/d), e=1-Math.pow(1-p,3);
-      num.textContent=Math.round(to*e).toLocaleString('de-DE')+' €';
-      if(p<1) requestAnimationFrame(f);
-    })(s);
-  }
-  const kNoStep=document.getElementById('kNoStep'), kClose=document.getElementById('kClose');
-  const clamp=(el,d)=>{const v=parseFloat(el.value); return (isFinite(v)&&v>=0&&v<=100)?v/100:d};
-  let knobT;
-  [kNoStep,kClose].forEach(el=>el.addEventListener('input',()=>{
-    render();
-    clearTimeout(knobT);
-    knobT=setTimeout(()=>{try{trk('leak_assumption_changed',el.id,parseFloat(el.value)||0)}catch(e){}},900);
-  }));
-
-  function render(){
-    if(price===null||dms===null) return;
-    // dms IST jetzt die Zahl der Kaufanfragen pro MONAT. Vorher wurde jede
-    // DM mal 30 genommen — das ergab bei „ueber 30 DMs" 1200 Anfragen und
-    // sechsstellige Monatswerte, die niemand glaubt.
-    const monthly=dms, nostep=clamp(kNoStep,.35), close=clamp(kClose,.30);
-    const val=Math.round(monthly*nostep*close*price/100)*100;
-    num.classList.add('live'); state.textContent='BERECHNET';
-    meter.style.setProperty('--fill', Math.min(1, val/12000).toFixed(2));
-    count(val);
-    unit.textContent=`BEI ~${monthly} KAUFANFRAGEN IM MONAT`;
-    formula.textContent=`FORMEL: ${monthly} ANFRAGEN × ${Math.round(nostep*100)} % OHNE NÄCHSTEN SCHRITT × ${Math.round(close*100)} % ABSCHLUSS × ${price.toLocaleString('de-DE')} € · SCHÄTZUNG MIT DEINEN ANNAHMEN, KEIN VERSPRECHEN`;
-    // Die Kundenzahl wird GERECHNET, nicht behauptet. Vorher stand bei jedem
-    // Betrag ueber 5.000 € „ein Kunde pro Monat" — bei 5.300 € auf ein
-    // 2.500-€-Angebot sind es zwei, und wer das nachrechnet, glaubt den Rest
-    // auch nicht mehr.
-    const kunden = price>0 ? val/price : 0;
-    verdict.innerHTML = kunden>=1.6
-      ? `Das sind <b>${Math.round(kunden)} Kunden im Monat</b>, die schon Interesse hatten — und die niemand zurückgeholt hat.`
-      : kunden>=0.8
-        ? `Das ist <b>ein Kunde pro Monat</b>, der schon Interesse hatte — und den niemand zurückgeholt hat.`
-        : val>=1500
-          ? `Über ein Jahr rund <b>${(val*12).toLocaleString('de-DE')} €</b> aus Gesprächen, die du längst geführt hast.`
-          : `Klingt klein? Es sind Menschen, die dich <b>zuerst gefragt haben</b>. Die kommen nicht wieder.`;
-  }
-})();
-
-/* ══════ HERO-CTA ══════ */
-(function(){
-  const b=document.getElementById('heroCta'); if(!b) return;
-  b.addEventListener('click', ()=>{
-    try{trk('hero_cta_click')}catch(e){}
-    // Nach dem Sprung ins Feld setzen — sonst muss man nochmal tippen.
-    setTimeout(()=>{const i=document.getElementById('email'); if(i) i.focus({preventScroll:true})},600);
-  });
-})();
-
-/* ══════ Zettel ══════ */
-document.querySelectorAll('[data-open]').forEach(it=>{
-  const t=()=>it.classList.toggle('open');
-  it.addEventListener('click',t);
-  it.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}});
-});
-
-/* ══════ Reveal ══════ */
-(function(){
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
-  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-})();
-
-/* ══════ SUPABASE CONFIG ══════ */
+/* ══════ SUPABASE ══════ */
 const SB='https://vukzjrszplyzaiperdsj.supabase.co';
 const SBK='sb_publishable_4zE5bvt8EPIA1UWX8fP6Ww_GIHjBdjE';
 const hdrs={'apikey':SBK,'Authorization':'Bearer '+SBK,'Content-Type':'application/json','Prefer':'return=minimal'};
 
-/* ══════ ANALYTICS ══════ */
+/* ══════ ANALYTICS ══════
+   Der eingegebene Vorname wird NIE mitgesendet. Er ist ein
+   personenbezogenes Datum eines Dritten, der nicht eingewilligt hat — und
+   im Feld daneben steht die Zusage, dass er das Gerät nicht verlässt.
+   Gesendet wird nur, DASS etwas eingegeben wurde, plus die Länge.        */
 let sessionId=localStorage.getItem('ir_session');
-if(!sessionId){sessionId=crypto.randomUUID();localStorage.setItem('ir_session',sessionId)}
-function trk(event,label,value,props={}){
-  const p={event,label:label||null,value:value||null,session_id:sessionId,
-    user_agent:navigator.userAgent.slice(0,300),referrer:document.referrer.slice(0,500),
-    properties:props,page:'landing'};
-  fetch(SB+'/rest/v1/analytics_events',{method:'POST',headers:hdrs,body:JSON.stringify(p)}).catch(()=>{});
+if(!sessionId){ sessionId=(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random())); localStorage.setItem('ir_session',sessionId); }
+function trk(event,label,value,props){
+  try{
+    fetch(SB+'/rest/v1/analytics_events',{method:'POST',headers:hdrs,body:JSON.stringify({
+      event, label:label||null, value:(value===0||value)?value:null, session_id:sessionId,
+      user_agent:navigator.userAgent.slice(0,300), referrer:document.referrer.slice(0,500),
+      properties:props||{}, page:'landing_v5'
+    })}).catch(function(){});
+  }catch(e){}
 }
 trk('page_view','load');
-let scrollMax=0;addEventListener('scroll',()=>{const p=Math.round(window.scrollY/window.innerHeight);if(p>scrollMax){scrollMax=p;trk('scroll_depth',null,p)}},{passive:true});
+let tiefe=0;
+addEventListener('scroll',function(){
+  const p=Math.round(window.scrollY/Math.max(1,window.innerHeight));
+  if(p>tiefe){ tiefe=p; trk('scroll_depth',null,p); }
+},{passive:true});
 
-/* ══════ SLIDER TRACKING ══════ */
-const origSet=Object.getOwnPropertyDescriptor(CSSStyleDeclaration.prototype,'setProperty');
-let slideT=0;
-Object.defineProperty(therm.style,'setProperty',{value:function(k,v){if(k==='--split'){const p=parseFloat(v);if(Math.abs(p-slideT)>2){slideT=p;trk('slider_move','thermogram_split',Math.round(p));}}return origSet.value.call(this,k,v)}});
+/* ══════ ZUSTAND ══════ */
+const S={ name:'', person:'sandra', gesendet:false };
 
-/* ══════ WAITLIST SUBMIT ══════ */
-document.getElementById('wl').addEventListener('submit', async e=>{
-  e.preventDefault();
-  const i=document.getElementById('email');
-  if(!i.value||!i.checkValidity()){i.focus();i.style.borderColor='var(--hot)';return}
-  const on=s=>document.querySelector(s+' .opt.on');
-  const priceB=on('#priceOpts'), dmB=on('#dmOpts');
-  const payload={email:i.value.trim(),
-    price_band:priceB?priceB.dataset.v:null,
-    dm_band:dmB?dmB.dataset.v:null,
-    est_leak:document.getElementById('num').textContent,
-    utm:location.search.slice(0,200),
-    source:'landing_page'};
-  trk('waitlist_submit','form_submit',null,{price_band:payload.price_band,dm_band:payload.dm_band,est_leak:payload.est_leak});
-  try{
-    const r=await fetch(SB+'/rest/v1/waitlist',{method:'POST',headers:hdrs,body:JSON.stringify(payload)});
-    if(r.ok){
-      const w=await r.json();
-      // Attribution
-      const attr={waitlist_id:w[0]?.id||null,utm_source:new URLSearchParams(location.search).get('utm_source')||null,
-        utm_medium:new URLSearchParams(location.search).get('utm_medium')||null,
-        referrer_url:document.referrer||null,calculator_used:!!priceB,calculator_value_eur:priceB?+priceB.dataset.v:null,
-        slider_interacted:slideT>0};
-      fetch(SB+'/rest/v1/waitlist_attribution',{method:'POST',headers:hdrs,body:JSON.stringify(attr)}).catch(()=>{});
-      e.target.style.display='none';document.getElementById('done').classList.add('show');
+const P={
+  sandra:{ eigen:true, kurz:'S', bg:'#d9cec2', fg:'#4a4136',
+    betrag:'2.400 €', betragNote:'der Preis, nach dem sie gefragt hat',
+    ekg:[0,0,0,0,0,0,0,2,7,9,0,0], still:2, puls:'flach seit deiner Zusage',
+    offen:'Sie hat nach dem Preis gefragt. Du hast geantwortet, dass du ihr abends schreibst — das ist zwölf Tage her.',
+    zitat:'Schreib ich dir heute Abend in Ruhe',
+    invest:[['34','Nachrichten hin und her'],['5 Wochen','seit ihrer ersten Nachricht'],['1 Story','auf die sie geantwortet hat, statt weiterzuscrollen']] },
+  marco:{ name:'Marco Behrens', kurz:'M', bg:'#c7d2cd', fg:'#33453e',
+    schuld:'Hat zugesagt und den Termin verstreichen lassen, vor 9 Tagen',
+    betrag:'4.800 €', betragNote:'dein Angebot liegt bei ihm',
+    ekg:[0,0,1,3,8,12,9,14,7,4,0,0], still:2, puls:'seit 9 Tagen flach',
+    offen:'Er hat 90 Minuten nach deinem Angebot selbst einen Zeitpunkt genannt und ihn verstreichen lassen. Sein Urlaub endete am 2. August.',
+    zitat:'Meld dich nach meinem Urlaub, bin ab dem 2.8. zurück',
+    invest:[['61','Nachrichten über zwei Kanäle'],['9 Wochen','im Gespräch, inklusive Wechsel zu WhatsApp'],['4.800 €','Angebot, das schon bei ihm liegt']] },
+  melanie:{ name:'Melanie Voss', kurz:'M', bg:'#d3cbd8', fg:'#443c4a',
+    schuld:'Du hast ihr Unterlagen zugesagt, vor 14 Tagen',
+    betrag:'2.400 €', betragNote:'Wert deines Programms',
+    ekg:[2,4,7,5,8,6,9,7,3,0,0,0], still:3, puls:'seit 14 Tagen flach',
+    offen:'Du wolltest ihr Unterlagen schicken. Das war nicht ihr Versprechen, sondern deins — sie hat es nie angemahnt und wird es auch nicht.',
+    zitat:'schick ich dir gleich rüber',
+    invest:[['52','Nachrichten seit April'],['4 Monate','lockerer Kontakt, dann konkret'],['1 Call','den ihr schon geführt habt']] },
+  jule:{ name:'Jule Amrein', kurz:'J', bg:'#ded2c0', fg:'#4d4232',
+    schuld:'Ihre Frage ist unbeantwortet, seit 19 Stunden',
+    betrag:'kein Preis', betragNote:'noch nichts genannt',
+    ekg:[0,0,0,0,0,0,0,0,0,0,4,9], still:0, puls:'gerade erst angefangen',
+    offen:'Sie hat gestern um 21:14 auf deine Story geantwortet und nach dem Ablauf gefragt. Sie antwortet dir sonst binnen zwei Stunden — heute erreichst du sie noch.',
+    zitat:'Wie läuft das bei dir eigentlich ab?',
+    invest:[['12','Nachrichten, alle aus dieser Woche'],['9 Tage','seit ihrer ersten Reaktion'],['—','noch kein Angebot, noch kein Preis']] },
+  tobias:{ name:'Tobias Klemm', kurz:'T', bg:'#dad6d0', fg:'#47443f',
+    schuld:'Seit 38 Tagen kein Kontakt, obwohl fällig',
+    betrag:'600 €', betragNote:'Anschlussmonat, den ihr besprochen hattet',
+    ekg:[9,11,6,0,0,0,0,0,0,0,0,0], still:9, puls:'seit 38 Tagen flach',
+    offen:'Er hat dein Programm durchgezogen und war zufrieden. Seit dem Abschlussgespräch habt ihr nicht mehr geschrieben. Der günstigste Kunde ist der, den du schon hast.',
+    zitat:'Danke dir, hat mir wirklich sehr geholfen',
+    invest:[['180','Nachrichten über das ganze Programm'],['12 Wochen','gemeinsame Arbeit'],['2.400 €','die er bereits bezahlt hat']] }
+};
+
+const $=function(id){ return document.getElementById(id); };
+const anzeigeName=function(){ return S.name.length>=2 ? S.name : 'Lisa'; };
+
+function malen(){
+  const name=anzeigeName();
+  const p=P[S.person]||P.sandra;
+
+  document.querySelectorAll('[data-name]').forEach(function(el){ el.textContent=name; });
+  $('nameDa').style.display = S.name.length>=2 ? 'block' : 'none';
+  $('nameLeer').style.display = S.name.length>=2 ? 'none' : 'block';
+
+  // Kopfzeile der Person
+  $('pName').textContent = p.eigen ? name : p.name;
+  $('pSchuld').textContent = p.eigen ? 'Du hast ihr eine Antwort versprochen, vor 12 Tagen' : p.schuld;
+  $('pBetrag').textContent = p.betrag;
+  $('pBetragNote').textContent = p.betragNote;
+  $('pOffen').textContent = p.offen;
+  $('pZitat').textContent = p.zitat;
+
+  const av=$('avatar');
+  av.textContent = p.eigen ? name.slice(0,1).toUpperCase() : p.kurz;
+  av.style.background=p.bg; av.style.color=p.fg;
+
+  // Puls: die letzten `still` Wochen sind blass — dort ist das Gespraech
+  // eingeschlafen.
+  const max=Math.max.apply(null,p.ekg)||1;
+  $('ekg').innerHTML = p.ekg.map(function(v,i){
+    const h=Math.max(4,Math.round(v/max*100));
+    const blass = p.still>0 && i>=p.ekg.length-p.still;
+    return '<span style="flex:1;height:'+h+'%;background:'+(blass?'#f7d9d6':'#101010')+';border-radius:2px 2px 0 0;min-height:2px"></span>';
+  }).join('');
+  $('puls').textContent=p.puls;
+
+  $('invest').innerHTML = p.invest.map(function(r){
+    return '<span style="color:#9a9793">'+r[0]+'</span><span>'+r[1]+'</span>';
+  }).join('');
+
+  document.querySelectorAll('.pkt').forEach(function(b){
+    b.style.borderColor = b.dataset.p===S.person ? '#101010' : '#fff';
+  });
+
+  $('schluss').textContent = S.name.length>=2
+    ? 'Sag mir, dass du dabei bist, und ob '+name+' immer noch wartet. Mehr brauche ich nicht, um anzufangen.'
+    : 'Sag mir, was du verkaufst und wie viele Leute dich im Monat nach dem Preis fragen. Mehr brauche ich nicht, um dir zu sagen, ob es passt.';
+}
+
+/* ══════ NAME ══════ */
+let nameGemeldet=false, nameT;
+$('derName').addEventListener('input', function(e){
+  S.name = e.target.value.replace(/[<>&"']/g,'').trim().slice(0,18);
+  if(S.name.length>=2){
+    $('nameDa').classList.add('hoch');
+    if(!nameGemeldet){
+      nameGemeldet=true;
+      clearTimeout(nameT);
+      nameT=setTimeout(function(){ trk('own_name_entered',null,S.name.length); },1200);
     }
-  }catch(err){console.error('Submit failed',err)}
+  }
+  malen();
 });
 
-/* ══════ CALCULATOR TRACKING ══════ */
-let calcFired=false;
-(function(){const obs=new MutationObserver(()=>{const n=document.getElementById('num');if(!calcFired&&n.classList.contains('live')){calcFired=true;trk('leak_calculator','calculator_used',null);}});obs.observe(document.getElementById('num'),{attributes:true,attributeFilter:['class']})})();
+/* ══════ PERSONEN AUF DER TAFEL ══════ */
+document.querySelectorAll('.pkt').forEach(function(b){
+  b.addEventListener('click', function(){
+    S.person=b.dataset.p;
+    malen();
+    trk('person_selected', b.dataset.p);
+  });
+});
 
-/* ══════ ZETTEL OPEN TRACKING ══════ */
-document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{if(!b.classList.contains('open'))trk('zettel_open','brief_item_expand')}));
+/* ══════ CTAs ══════ */
+$('heroCta').addEventListener('click', function(){ trk('hero_cta_click'); });
+$('dmCta').addEventListener('click', function(){ trk('dm_cta_click'); });
+
+/* ══════ WARTELISTE ══════ */
+$('wl').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const i=$('email'), f=$('fehler');
+  f.style.display='none';
+  if(!i.value || !i.checkValidity()){ i.focus(); i.style.borderColor='#e02b1d'; return; }
+
+  const utm=location.search||'';
+  try{
+    const r=await fetch(SB+'/rest/v1/waitlist',{method:'POST',headers:hdrs,body:JSON.stringify({
+      email:i.value.trim(), utm:utm.slice(0,500), source:'landing_v5'
+    })});
+    // Doppelte Anmeldung ist kein Fehler fuer den Besucher — der
+    // UNIQUE-Index hat nur schon einen Eintrag. Er ist trotzdem drauf.
+    if(!r.ok && r.status!==409){
+      f.textContent='Das hat gerade nicht geklappt. Schreib mir einfach auf Instagram, dann geht es sofort.';
+      f.style.display='block';
+      trk('waitlist_error',String(r.status));
+      return;
+    }
+    trk('waitlist_submit', r.status===409?'doppelt':'neu');
+  }catch(err){
+    f.textContent='Keine Verbindung. Schreib mir einfach auf Instagram, dann geht es sofort.';
+    f.style.display='block';
+    trk('waitlist_error','netz');
+    return;
+  }
+  S.gesendet=true;
+  $('formBlock').style.display='none';
+  const d=$('danke'); d.style.display='block'; d.classList.add('hoch');
+});
+
+malen();
 </script>
 </body>
 </html>
