@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Infrared — jemand hat dich zuerst gefragt und woanders gekauft</title>
+<meta name="description" content="Jeden Monat kauft jemand woanders, der dich zuerst gefragt hat. Infrared zeigt dir, wer gerade dabei ist.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Eisen-Thermalskala */
+    --void:#05060a; --deep:#0a0b14; --slate:#171a24; --edge:#232838;
+    --v1:#2a1b4a;  --v2:#5b2a6e;  --mag:#a83368; --emb:#e0632f; --hot:#ff9d3c; --white:#ffe6b8;
+    --grey:#6e737f; --greyer:#3d424e;
+    --ink:#f2ede4; --mut:#8b91a0; --dim:#565c69;
+    --D:'Bricolage Grotesque',sans-serif; --M:'IBM Plex Mono',monospace; --S:'Instrument Serif',serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--void);color:var(--ink);font-family:var(--D);font-size:17px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--mag);color:#fff}
+  :focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+  .wrap{max-width:1320px;margin:0 auto;padding:0 clamp(18px,4vw,56px)}
+
+  /* Filmkorn über allem */
+  body::after{content:"";position:fixed;inset:0;z-index:99;pointer-events:none;opacity:.16;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E")}
+
+  nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;
+    font-family:var(--M);font-size:10.5px;letter-spacing:.18em;color:var(--dim)}
+  nav .lg{display:flex;align-items:center;gap:9px;color:var(--ink);font-weight:500;letter-spacing:.26em}
+  nav .lg i{width:7px;height:7px;background:var(--hot);border-radius:50%;box-shadow:0 0 14px var(--emb);animation:bl 3s infinite}
+  @keyframes bl{0%,100%{opacity:1}50%{opacity:.45}}
+
+  /* ══════════ HERO ══════════ */
+  .hero{padding:clamp(30px,5vh,58px) 0 clamp(24px,4vh,44px)}
+  .kick{font-family:var(--M);font-size:10.5px;letter-spacing:.2em;color:var(--emb);margin-bottom:22px}
+  h1{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 82,'opsz' 96;
+    font-size:clamp(38px,6.6vw,92px);line-height:.96;letter-spacing:-.03em;max-width:15ch}
+  h1 .l{background:linear-gradient(96deg,var(--mag),var(--emb) 60%,var(--hot));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{margin-top:26px;font-size:clamp(16.5px,1.4vw,20px);color:var(--mut);max-width:54ch}
+  .sub b{color:var(--ink);font-weight:600}
+
+  /* ══════════ SIGNATUR: DAS DIPTYCHON ══════════ */
+  .scope{position:relative;margin-top:clamp(32px,5vh,60px);border:1px solid var(--edge);
+    background:var(--deep);user-select:none;touch-action:pan-y;overflow:hidden}
+  .scope-top{display:flex;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--edge);
+    font-family:var(--M);font-size:10px;letter-spacing:.16em;color:var(--dim);position:relative;z-index:6}
+  .scope-top .r{color:var(--hot)}
+  .stage{position:relative;height:clamp(360px,52vh,520px)}
+
+  .layer{position:absolute;inset:0;padding:clamp(14px,2.2vh,26px) clamp(14px,2vw,26px)}
+  /* — links: wie du es siehst — */
+  .plain{background:
+    repeating-linear-gradient(180deg,transparent 0 3px,rgba(255,255,255,.012) 3px 4px),var(--deep)}
+  /* — rechts: wie Infrared es sieht — */
+  .therm{background:radial-gradient(120% 100% at 70% 40%,var(--v1),var(--void) 70%);
+    clip-path:inset(0 0 0 var(--split,50%));z-index:2}
+  .therm::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:repeating-linear-gradient(180deg,transparent 0 2px,rgba(0,0,0,.22) 2px 3px);mix-blend-mode:multiply}
+
+  .rowlist{display:flex;flex-direction:column;gap:clamp(6px,1.1vh,12px);height:100%}
+  .row{flex:1;display:grid;grid-template-columns:minmax(90px,150px) 1fr auto;gap:clamp(10px,1.6vw,22px);
+    align-items:center;padding:0 clamp(10px,1.4vw,18px);border:1px solid transparent;min-height:0}
+  /* plain */
+  .plain .row{border-color:#12151d;background:#0b0d13}
+  .plain .nm{font-weight:500;font-size:clamp(13px,1.15vw,16px);color:var(--grey)}
+  .plain .txt{font-size:clamp(12px,1.05vw,14.5px);color:var(--greyer);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .plain .meta{font-family:var(--M);font-size:10px;color:var(--greyer);letter-spacing:.08em}
+  /* thermal */
+  .therm .row{border-color:rgba(255,255,255,.06);position:relative;overflow:hidden}
+  .therm .row::before{content:"";position:absolute;inset:0;z-index:0;opacity:.9;
+    background:radial-gradient(90% 220% at 6% 50%, var(--c1), transparent 62%)}
+  .therm .row>*{position:relative;z-index:1}
+  .therm .nm{font-weight:700;font-size:clamp(13px,1.15vw,16px);color:var(--white)}
+  .therm .why{font-size:clamp(12px,1.05vw,14.5px);color:#e8d6c4;line-height:1.35}
+  .therm .why q{font-family:var(--S);font-style:italic;color:#fff;quotes:"„" "“"}
+  .therm .tmp{font-family:var(--M);font-weight:500;font-size:clamp(13px,1.3vw,19px);color:var(--white);
+    text-shadow:0 0 18px rgba(255,157,60,.55)}
+  .r1{--c1:rgba(255,157,60,.5)} .r2{--c1:rgba(224,99,47,.42)} .r3{--c1:rgba(168,51,104,.4)}
+  .r4{--c1:rgba(91,42,110,.42)} .r5{--c1:rgba(42,27,74,.5)}
+
+  /* Griff */
+  .handle{position:absolute;top:0;bottom:0;left:var(--split,50%);width:2px;z-index:5;
+    background:linear-gradient(180deg,var(--white),var(--hot),var(--mag),var(--v2));cursor:ew-resize;
+    box-shadow:0 0 22px rgba(255,157,60,.55)}
+  .knob{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;
+    border-radius:50%;background:var(--void);border:1px solid var(--hot);display:grid;place-items:center;
+    font-family:var(--M);font-size:9px;letter-spacing:.1em;color:var(--hot);cursor:ew-resize;
+    box-shadow:0 0 30px rgba(255,157,60,.35)}
+  .knob::before{content:"◀ ▶"}
+  .hint-drag{position:absolute;left:0;right:0;bottom:12px;text-align:center;z-index:6;pointer-events:none;
+    font-family:var(--M);font-size:10px;letter-spacing:.2em;color:var(--mut);transition:opacity .4s}
+  .scope.touched .hint-drag{opacity:0}
+  .lbl{position:absolute;top:12px;font-family:var(--M);font-size:9.5px;letter-spacing:.18em;z-index:6;pointer-events:none}
+  .lbl.left{left:16px;color:var(--greyer)} .lbl.right{right:16px;color:var(--hot)}
+
+  /* ══════════ AGITATE ══════════ */
+  .agit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--edge);
+    margin-top:clamp(48px,8vh,96px);border-top:1px solid var(--edge);border-bottom:1px solid var(--edge)}
+  @media(max-width:880px){.agit{grid-template-columns:1fr}}
+  .ag{background:var(--void);padding:30px 26px;transition:background .4s}
+  .ag:hover{background:var(--deep)}
+  .ag q{font-family:var(--S);font-style:italic;font-size:clamp(19px,1.8vw,24px);line-height:1.35;quotes:"„" "“"}
+  .ag .m{font-family:var(--M);font-size:9.5px;letter-spacing:.14em;color:var(--dim);margin:16px 0 12px}
+  .ag .o{font-size:15px;color:var(--mut)} .ag .o b{color:var(--mag);font-weight:700}
+
+  section{position:relative}
+  .band{padding:clamp(56px,9vh,110px) 0}
+  h2{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 84,'opsz' 60;
+    font-size:clamp(28px,4.2vw,56px);line-height:1.02;letter-spacing:-.028em;max-width:20ch}
+  .eyeb{font-family:var(--M);font-size:10.5px;letter-spacing:.2em;color:var(--emb);margin-bottom:20px}
+
+  /* ══════════ LECK-RECHNER ══════════ */
+  .calc{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,4vw,72px);margin-top:44px;align-items:start}
+  @media(max-width:960px){.calc{grid-template-columns:1fr;gap:32px}}
+  .qlab{font-family:var(--M);font-size:10.5px;letter-spacing:.15em;color:var(--dim);margin-bottom:13px}
+  .opts{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:28px}
+  .opt{appearance:none;background:transparent;border:1px solid var(--edge);color:var(--mut);cursor:pointer;
+    font-family:var(--M);font-size:12.5px;padding:12px 18px;transition:all .16s}
+  .opt:hover{border-color:var(--emb);color:var(--ink)}
+  .opt.on{background:linear-gradient(100deg,var(--mag),var(--emb));border-color:transparent;color:#fff;font-weight:500}
+  .meter{border:1px solid var(--edge);background:linear-gradient(180deg,var(--deep),var(--void));position:relative;overflow:hidden}
+  .meter::before{content:"";position:absolute;inset:0;opacity:var(--fill,0);transition:opacity .8s;
+    background:radial-gradient(120% 90% at 50% 120%,var(--mag),transparent 65%)}
+  .mtop{display:flex;justify-content:space-between;padding:13px 20px;border-bottom:1px solid var(--edge);
+    font-family:var(--M);font-size:9.5px;letter-spacing:.16em;color:var(--dim);position:relative}
+  .mbody{padding:36px 24px 30px;position:relative}
+  .mlab{font-family:var(--M);font-size:10.5px;letter-spacing:.16em;color:var(--dim);margin-bottom:14px}
+  .mnum{font-family:var(--D);font-weight:800;font-variation-settings:'wdth' 78,'opsz' 96;
+    font-size:clamp(52px,8vw,110px);line-height:.88;letter-spacing:-.04em;color:var(--greyer);transition:color .6s}
+  .mnum.live{background:linear-gradient(96deg,var(--white),var(--hot) 40%,var(--mag));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .munit{font-family:var(--M);font-size:11px;letter-spacing:.12em;color:var(--dim);margin-top:14px}
+  .mverd{margin-top:24px;padding-top:20px;border-top:1px solid var(--edge);font-family:var(--S);font-style:italic;
+    font-size:clamp(17px,1.6vw,21px);line-height:1.45;color:var(--mut);min-height:3.2em}
+  .mverd b{font-family:var(--D);font-style:normal;font-weight:700;color:var(--ink)}
+  .mfine{padding:13px 20px;border-top:1px solid var(--edge);font-family:var(--M);font-size:9.5px;
+    letter-spacing:.06em;color:var(--dim);line-height:1.85;position:relative}
+
+  /* ══════════ LÖSUNG ══════════ */
+  .sol{border-top:1px solid var(--edge)}
+  .lead{font-family:var(--S);font-style:italic;font-size:clamp(24px,3.2vw,42px);line-height:1.25;max-width:22ch;margin-bottom:46px}
+  .lead .g{font-family:var(--D);font-style:normal;font-weight:800;font-variation-settings:'wdth' 84;
+    background:linear-gradient(96deg,var(--hot),var(--mag));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .duo{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(28px,4vw,64px);align-items:start}
+  @media(max-width:960px){.duo{grid-template-columns:1fr}}
+  .st{display:grid;grid-template-columns:auto 1fr;gap:18px;margin-bottom:28px}
+  .st .n{font-family:var(--M);font-size:10.5px;color:var(--emb);letter-spacing:.14em;padding-top:5px}
+  .st h3{font-size:18px;font-weight:700;margin-bottom:5px}
+  .st p{font-size:15.5px;color:var(--mut);line-height:1.6}
+  .brief{border:1px solid var(--edge);background:var(--deep)}
+  .btop{display:flex;justify-content:space-between;padding:13px 18px;border-bottom:1px solid var(--edge);
+    font-family:var(--M);font-size:9.5px;letter-spacing:.14em;color:var(--dim)}
+  .bit{padding:17px 18px;border-bottom:1px solid var(--edge);cursor:pointer;transition:background .25s}
+  .bit:hover{background:#0e1119} .bit:last-of-type{border-bottom:none}
+  .bl{display:flex;align-items:baseline;gap:12px}
+  .bl .nm{font-weight:700;font-size:15.5px} .bl .tg{font-family:var(--M);font-size:9px;letter-spacing:.12em;color:var(--hot);margin-left:auto}
+  .bw{font-size:14px;color:var(--mut);margin-top:5px} .bw q{font-family:var(--S);font-style:italic;color:var(--ink);quotes:"„" "“"}
+  .bd{display:none;margin-top:13px;padding:14px 16px;background:#10131b;border-left:2px solid var(--hot)}
+  .bd p{font-family:var(--S);font-style:italic;font-size:16.5px;line-height:1.55}
+  .bd .a{font-family:var(--M);font-size:9px;letter-spacing:.14em;color:var(--dim);margin-top:12px}
+  .bit.open .bd{display:block;animation:f .3s ease}
+  @keyframes f{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .btap{font-family:var(--M);font-size:9px;letter-spacing:.14em;color:var(--dim);margin-top:9px}
+  .bfoot{padding:13px 18px;font-family:var(--M);font-size:9.5px;letter-spacing:.1em;color:var(--mut);border-top:1px solid var(--edge)}
+
+  /* ══════════ PRINZIP + CTA ══════════ */
+  .close{border-top:1px solid var(--edge)}
+  .wall{font-family:var(--S);font-style:italic;font-size:clamp(25px,3.6vw,46px);line-height:1.25;max-width:20ch;margin-bottom:18px}
+  .wall .g{background:linear-gradient(96deg,var(--hot),var(--mag));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .small{color:var(--mut);max-width:50ch;margin-bottom:52px}
+  .ctarow{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,64px);align-items:end}
+  @media(max-width:880px){.ctarow{grid-template-columns:1fr;gap:34px}}
+  .ctarow p{color:var(--mut);max-width:44ch;margin-top:14px} .ctarow p b{color:var(--ink);font-weight:600}
+  form .r{display:flex;gap:8px} @media(max-width:520px){form .r{flex-direction:column}}
+  form input{flex:1;background:var(--deep);border:1px solid var(--edge);color:var(--ink);
+    font-family:var(--D);font-size:16px;padding:17px 18px}
+  form input:focus{outline:none;border-color:var(--hot)}
+  form input::placeholder{color:var(--dim)}
+  form button{border:none;cursor:pointer;color:#1a0c06;font-family:var(--D);font-weight:700;font-size:16px;
+    padding:17px 28px;white-space:nowrap;background:linear-gradient(100deg,var(--hot),var(--emb));transition:filter .16s}
+  form button:hover{filter:brightness(1.15)}
+  .fine{margin-top:13px;font-family:var(--M);font-size:10px;letter-spacing:.08em;color:var(--dim);line-height:1.9}
+  .done{display:none;border-left:2px solid var(--hot);padding:18px 22px;background:var(--deep)}
+  .done.show{display:block} .done .t{font-family:var(--S);font-style:italic;font-size:23px;margin-bottom:6px}
+  .done p{color:var(--mut);font-size:15px;margin:0}
+
+  footer{border-top:1px solid var(--edge);padding:22px 0 52px;font-family:var(--M);
+    font-size:10px;letter-spacing:.08em;color:var(--dim);line-height:2.2}
+  footer a{color:var(--mut);text-decoration:none;border-bottom:1px solid var(--edge)}
+  footer a:hover{color:var(--hot)}
+
+  .rv{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}
+  .rv.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav><span class="lg"><i></i>INFRARED</span><span>WARTELISTE — 5 PLÄTZE</span></nav>
+
+  <!-- ═══ HERO + SIGNATUR ═══ -->
+  <section class="hero">
+    <div class="kick">FÜR COACHES UND BERATER, DIE ÜBER DMS VERKAUFEN</div>
+    <h1>Jeden Monat kauft jemand woanders, <span class="l">der dich zuerst gefragt hat.</span></h1>
+    <p class="sub">Er hat nicht Nein gesagt. Er hat gefragt, was es kostet — und deine Antwort kam zwei Tage zu spät. <b>Das Bitterste: Du erfährst nie, dass es passiert ist.</b></p>
+
+    <div class="scope" id="scope">
+      <div class="scope-top"><span>POSTFACH · MONTAG 07:30</span><span class="r" id="scopeState">ZIEH DEN GRIFF →</span></div>
+      <div class="stage" id="stage">
+        <!-- LINKS: wie du es siehst -->
+        <div class="layer plain">
+          <div class="rowlist">
+            <div class="row"><span class="nm">sandra.k</span><span class="txt">Was kostet dein 1:1 eigentlich? Klingt gena…</span><span class="meta">12 T</span></div>
+            <div class="row"><span class="nm">marco_baut</span><span class="txt">Mega Gespräch! Meld dich nach meinem Urla…</span><span class="meta">3 W</span></div>
+            <div class="row"><span class="nm">jule.coacht</span><span class="txt">Genau mein Thema gerade 😩 Wie läuft das…</span><span class="meta">1 T</span></div>
+            <div class="row"><span class="nm">melanie</span><span class="txt">Du: Schreib ich dir heute Abend in Ruhe ✍️</span><span class="meta">12 T</span></div>
+            <div class="row"><span class="nm">nico.h</span><span class="txt">Danke für den Tipp! 🙏</span><span class="meta">5 T</span></div>
+          </div>
+        </div>
+        <!-- RECHTS: wie Infrared es sieht -->
+        <div class="layer therm" id="therm">
+          <div class="rowlist">
+            <div class="row r1"><span class="nm">Sandra K.</span><span class="why">Preisfrage offen — <q>klingt genau nach dem, was ich brauche</q></span><span class="tmp">38,2°</span></div>
+            <div class="row r2"><span class="nm">Marco B.</span><span class="why">Sein <q>meld dich nach dem Urlaub</q> ist seit 3 Wochen fällig</span><span class="tmp">33,5°</span></div>
+            <div class="row r3"><span class="nm">Jule</span><span class="why">Story-Antwort gestern 21:14 — Fenster offen</span><span class="tmp">29,1°</span></div>
+            <div class="row r4"><span class="nm">Melanie</span><span class="why"><q>Heute Abend</q> — dein Wort, seit 12 Tagen offen</span><span class="tmp">24,7°</span></div>
+            <div class="row r5"><span class="nm">Nico H.</span><span class="why">Kein offener Faden — alles erledigt</span><span class="tmp">14,3°</span></div>
+          </div>
+        </div>
+        <div class="lbl left">SO SIEHST DU ES</div>
+        <div class="lbl right">SO SIEHT INFRARED ES</div>
+        <div class="handle" id="handle"><div class="knob"></div></div>
+        <div class="hint-drag" id="hintDrag">ZIEH DEN GRIFF NACH LINKS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ AGITATE ═══ -->
+  <div class="agit">
+    <div class="ag rv"><q>Was kostet dein 1:1 eigentlich?</q><div class="m">@SANDRA.K · VOR 12 TAGEN · UNGELESEN</div><p class="o">Sie hat nicht nachgehakt. <b>Sie hat woanders gefragt.</b></p></div>
+    <div class="ag rv"><q>Meld dich nach meinem Urlaub, dann machen wir das klar.</q><div class="m">@MARCO_BAUT · 90 MIN NACH DEINEM ANGEBOT</div><p class="o">Sein Urlaub war vor drei Wochen. <b>Niemand hat sich gemeldet.</b></p></div>
+    <div class="ag rv"><q>Schreib ich dir heute Abend in Ruhe.</q><div class="m">DEINE LETZTE NACHRICHT AN @MELANIE</div><p class="o">Nicht sie ist abgesprungen. <b>Dein Wort ist es.</b></p></div>
+  </div>
+
+  <!-- ═══ RECHNER ═══ -->
+  <section class="band">
+    <div class="eyeb rv">DEIN LECK</div>
+    <h2 class="rv">Zwei Angaben. Dann weißt du, worüber wir reden.</h2>
+    <div class="calc">
+      <div class="rv">
+        <div class="qlab">01 — WAS KOSTET DEIN ANGEBOT?</div>
+        <div class="opts" id="priceOpts">
+          <button class="opt" data-v="1000" type="button">~1.000 €</button>
+          <button class="opt" data-v="2500" type="button">~2.500 €</button>
+          <button class="opt" data-v="5000" type="button">~5.000 €</button>
+          <button class="opt" data-v="10000" type="button">10.000 €+</button>
+        </div>
+        <div class="qlab">02 — WIE VIELE ANFRAGEN &amp; KUNDEN-DMS AM TAG?</div>
+        <div class="opts" id="dmOpts">
+          <button class="opt" data-v="2" type="button">Unter 3</button>
+          <button class="opt" data-v="6" type="button">3 – 10</button>
+          <button class="opt" data-v="18" type="button">10 – 30</button>
+          <button class="opt" data-v="40" type="button">Über 30</button>
+        </div>
+        <p style="font-family:var(--M);font-size:10px;letter-spacing:.08em;color:var(--dim);line-height:1.9">
+          KEINE E-MAIL NÖTIG · ERGEBNIS SOFORT · FORMEL OFFEN
+        </p>
+      </div>
+      <div class="meter rv" id="meter">
+        <div class="mtop"><span>SCHÄTZUNG · DEIN POSTFACH</span><span id="mState">WARTE AUF EINGABE</span></div>
+        <div class="mbody">
+          <div class="mlab">LIEGT PRO MONAT UNBEARBEITET IN DEINEN CHATS</div>
+          <div class="mnum" id="num">—</div>
+          <div class="munit" id="unit">WÄHLE LINKS ZWEI ANGABEN</div>
+          <p class="mverd" id="verdict">Die meisten unterschätzen diese Zahl deutlich — verlorene Gespräche beschweren sich nicht.</p>
+        </div>
+        <div class="mfine" id="formula">FORMEL: ANFRAGEN/MONAT × 12 % QUALIFIZIERT × 35 % OHNE NÄCHSTEN SCHRITT × 30 % ABSCHLUSS × DEIN PREIS · KONSERVATIV, KEIN VERSPRECHEN</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ LÖSUNG ═══ -->
+  <section class="band sol">
+    <p class="lead rv">Infrared holt dir diese Gespräche zurück — <span class="g">bevor sie sterben.</span></p>
+    <div class="duo">
+      <div class="rv">
+        <div class="st"><div class="n">01</div><div><h3>Du verbindest deine Chats</h3><p>Instagram- und WhatsApp-Verläufe, von dir exportiert. Kein Scraping, kein Zugriff auf dein Konto, keine fremden Daten.</p></div></div>
+        <div class="st"><div class="n">02</div><div><h3>Infrared vergisst nichts</h3><p>Jede Zusage, jede offene Preisfrage, jedes „meld dich nach dem Urlaub" — mit dem Zitat aus dem echten Chat als Beleg.</p></div></div>
+        <div class="st"><div class="n">03</div><div><h3>Morgens: drei Menschen, drei Entwürfe</h3><p>Wer, warum, was du schreiben könntest. Du liest, passt an, drückst Senden. Sechzig Sekunden.</p></div></div>
+      </div>
+      <div class="brief rv">
+        <div class="btop"><span>DEIN ZETTEL · MO 07:30</span><span>TIPPEN FÜR ENTWURF</span></div>
+        <div class="bit" data-open tabindex="0" role="button">
+          <div class="bl"><span class="nm">Sandra K.</span><span class="tg">PREISFRAGE · 12 TAGE</span></div>
+          <p class="bw">Sie fragte <q>was kostet dein 1:1</q> — du sagtest <q>heute Abend</q>.</p>
+          <div class="bd"><p>„Sandra, deine Frage ist bei mir untergegangen — mein Fehler. Das 1:1 startet bei X. Erzähl kurz, wo du stehst, dann sag ich dir ehrlich, ob es passt."</p><div class="a">[ SENDEN ] [ ANPASSEN ] [ HEUTE NICHT ]</div></div>
+          <div class="btap">▸ ENTWURF ANSEHEN</div>
+        </div>
+        <div class="bit" data-open tabindex="0" role="button">
+          <div class="bl"><span class="nm">Marco B.</span><span class="tg">FÄLLIG SEIT 3 WOCHEN</span></div>
+          <p class="bw">Sein <q>meld dich nach dem Urlaub</q> ist überfällig.</p>
+          <div class="bd"><p>„Marco! Urlaub gut überstanden? Du wolltest danach durchstarten — steht das noch? Sag ruhig ehrlich, wenn sich was geändert hat."</p><div class="a">[ SENDEN ] [ ANPASSEN ] [ HEUTE NICHT ]</div></div>
+          <div class="btap">▸ ENTWURF ANSEHEN</div>
+        </div>
+        <div class="bit" data-open tabindex="0" role="button">
+          <div class="bl"><span class="nm">Jule</span><span class="tg">FENSTER OFFEN</span></div>
+          <p class="bw">Story-Antwort gestern 21:14 — <q>genau mein Thema</q>.</p>
+          <div class="bd"><p>„Jule, hab deine Antwort gesehen — was heißt ‚genau mein Thema' bei dir gerade konkret?"</p><div class="a">[ SENDEN ] [ ANPASSEN ] [ HEUTE NICHT ]</div></div>
+          <div class="btap">▸ ENTWURF ANSEHEN</div>
+        </div>
+        <div class="bfoot">DIESE WOCHE: 6/6 ZUSAGEN GEHALTEN · 0 ANFRAGEN LIEGEN GEBLIEBEN</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ PRINZIP + CTA ═══ -->
+  <section class="band close">
+    <p class="wall rv">Keine KI schreibt deinen Kunden. <span class="g">Jede Nachricht kommt von dir.</span></p>
+    <p class="small rv">Alle bauen gerade Bots, die für dich antworten. Wir glauben das Gegenteil: Automatisiert wird das Erinnern — niemals die Beziehung.</p>
+    <div class="ctarow">
+      <div class="rv"><h2>Ich suche 5 Coaches für den Anfang.</h2>
+        <p>Wir schauen gemeinsam in deine letzten 90 Tage, und ich zeige dir die Gespräche, in denen jemand auf dich wartet. <b>Wenn's dir nichts bringt, sage ich dir das zuerst.</b></p></div>
+      <div class="rv">
+        <form id="wl" novalidate>
+          <div class="r"><input type="email" id="email" placeholder="Deine E-Mail" required autocomplete="email">
+            <button type="submit">Platz sichern</button></div>
+          <p class="fine">KOSTENLOS · KEIN SPAM · JEDERZEIT LÖSCHBAR<br>GEBAUT VON TIM — ÖFFENTLICH, TAG FÜR TAG</p>
+        </form>
+        <div class="done" id="done"><div class="t">Du bist drauf.</div><p>Ich melde mich persönlich, sobald ein Platz frei wird.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>INFRARED · KEIN SCRAPING · KEIN AUTO-SEND · KEINE SCHATTENPROFILE</div>
+    <div><a href="https://instagram.com/timfromsachs" target="_blank" rel="noopener">@TIMFROMSACHS</a> · DATENSCHUTZ &amp; IMPRESSUM FOLGEN</div>
+  </footer>
+</div>
+
+<script>
+/* ══════ DIPTYCHON ══════ */
+(function(){
+  const scope=document.getElementById('scope'), stage=document.getElementById('stage'),
+        therm=document.getElementById('therm'), handle=document.getElementById('handle'),
+        state=document.getElementById('scopeState');
+  let split=62, dragging=false, auto=true;
+
+  function set(p){
+    split=Math.max(0,Math.min(100,p));
+    therm.style.setProperty('--split', split+'%');
+    handle.style.left = split+'%';
+    if(split<45) state.textContent='THERMOGRAMM AKTIV';
+    else if(split>85) state.textContent='ZIEH DEN GRIFF →';
+    else state.textContent='SCAN…';
+  }
+  set(62);
+
+  /* sanfter Auto-Schwenk bis zur ersten Berührung */
+  let t0=performance.now();
+  (function idle(t){
+    if(auto){
+      const k=(Math.sin((t-t0)/2600)+1)/2;      // 0..1
+      set(52 + k*22);
+      requestAnimationFrame(idle);
+    }
+  })(t0);
+
+  function pos(e){
+    const r=stage.getBoundingClientRect();
+    const x=(e.touches?e.touches[0].clientX:e.clientX)-r.left;
+    set(x/r.width*100);
+  }
+  function start(e){ auto=false; scope.classList.add('touched'); dragging=true; pos(e); }
+  function move(e){ if(dragging){ pos(e); e.preventDefault(); } }
+  function end(){ dragging=false; }
+
+  stage.addEventListener('pointerdown', start);
+  addEventListener('pointermove', move, {passive:false});
+  addEventListener('pointerup', end);
+  stage.addEventListener('pointermove', e=>{ if(!dragging && !auto) pos(e); });
+})();
+
+/* ══════ LECK-RECHNER ══════ */
+(function(){
+  let price=null, dms=null;
+  const num=document.getElementById('num'), unit=document.getElementById('unit'),
+        verdict=document.getElementById('verdict'), state=document.getElementById('mState'),
+        formula=document.getElementById('formula'), meter=document.getElementById('meter');
+
+  function pick(id, cb){
+    document.getElementById(id).addEventListener('click', e=>{
+      const b=e.target.closest('.opt'); if(!b) return;
+      document.getElementById(id).querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));
+      b.classList.add('on'); cb(+b.dataset.v); render();
+    });
+  }
+  pick('priceOpts', v=>price=v); pick('dmOpts', v=>dms=v);
+
+  function count(to){
+    const s=performance.now(), d=1000;
+    (function f(t){
+      const p=Math.min(1,(t-s)/d), e=1-Math.pow(1-p,3);
+      num.textContent=Math.round(to*e).toLocaleString('de-DE')+' €';
+      if(p<1) requestAnimationFrame(f);
+    })(s);
+  }
+  function render(){
+    if(price===null||dms===null) return;
+    const monthly=dms*30, val=Math.round(monthly*0.12*0.35*0.30*price/100)*100;
+    num.classList.add('live'); state.textContent='BERECHNET';
+    meter.style.setProperty('--fill', Math.min(1, val/12000).toFixed(2));
+    count(val);
+    unit.textContent=`BEI ~${monthly} ANFRAGEN IM MONAT`;
+    formula.textContent=`FORMEL: ${monthly} ANFRAGEN × 12 % QUALIFIZIERT × 35 % OHNE NÄCHSTEN SCHRITT × 30 % ABSCHLUSS × ${price.toLocaleString('de-DE')} € · KONSERVATIV, KEIN VERSPRECHEN`;
+    verdict.innerHTML = val>=5000
+      ? `Das ist <b>ein Kunde pro Monat</b>, der schon Interesse hatte — und den niemand zurückgeholt hat.`
+      : val>=1500
+        ? `Über ein Jahr rund <b>${(val*12).toLocaleString('de-DE')} €</b> aus Gesprächen, die du längst geführt hast.`
+        : `Klingt klein? Es sind Menschen, die dich <b>zuerst gefragt haben</b>. Die kommen nicht wieder.`;
+  }
+})();
+
+/* ══════ Zettel ══════ */
+document.querySelectorAll('[data-open]').forEach(it=>{
+  const t=()=>it.classList.toggle('open');
+  it.addEventListener('click',t);
+  it.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();t()}});
+});
+
+/* ══════ Reveal ══════ */
+(function(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.1});
+  document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+})();
+
+/* ══════ SUPABASE HIER VERDRAHTEN (Claude Code) ══════
+   POST https://<PROJECT>.supabase.co/rest/v1/waitlist
+   headers: apikey / Authorization Bearer <ANON> / Content-Type json / Prefer return=minimal
+   Tabelle: waitlist(id, created_at, email, price_band, dm_band, est_leak, utm) · RLS: anon INSERT only */
+document.getElementById('wl').addEventListener('submit', e=>{
+  e.preventDefault();
+  const i=document.getElementById('email');
+  if(!i.value||!i.checkValidity()){i.focus();i.style.borderColor='var(--hot)';return}
+  const on=s=>document.querySelector(s+' .opt.on');
+  const payload={email:i.value.trim(),
+    price_band:on('#priceOpts')?on('#priceOpts').dataset.v:null,
+    dm_band:on('#dmOpts')?on('#dmOpts').dataset.v:null,
+    est_leak:document.getElementById('num').textContent,
+    utm:location.search.slice(0,200), created_at:new Date().toISOString()};
+  console.log('WAITLIST_PAYLOAD',payload); // ← ersetzen
+  e.target.style.display='none';
+  document.getElementById('done').classList.add('show');
+});
+</script>
+</body>
+</html>
