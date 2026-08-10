@@ -42,6 +42,11 @@
     -webkit-background-clip:text;background-clip:text;color:transparent}
   .sub{margin-top:26px;font-size:clamp(16.5px,1.4vw,20px);color:var(--mut);max-width:54ch}
   .sub b{color:var(--ink);font-weight:600}
+  /* Die Kernzeile. Steht oben, weil der erste Halbsatz Marktstandard ist —
+     jedes CRM verspricht ihn. Der Keil ist der zweite. */
+  .wedge{margin-top:20px;padding-left:16px;border-left:2px solid var(--hot);
+    font-size:clamp(15.5px,1.3vw,18px);color:var(--mut);max-width:52ch}
+  .wedge b{color:var(--white);font-weight:700}
 
   /* ══════════ SIGNATUR: DAS DIPTYCHON ══════════ */
   .scope{position:relative;margin-top:clamp(32px,5vh,60px);border:1px solid var(--edge);
@@ -77,8 +82,14 @@
   .therm .nm{font-weight:700;font-size:clamp(13px,1.15vw,16px);color:var(--white)}
   .therm .why{font-size:clamp(12px,1.05vw,14.5px);color:#e8d6c4;line-height:1.35}
   .therm .why q{font-family:var(--S);font-style:italic;color:#fff;quotes:"„" "“"}
-  .therm .tmp{font-family:var(--M);font-weight:500;font-size:clamp(13px,1.3vw,19px);color:var(--white);
-    text-shadow:0 0 18px rgba(255,157,60,.55)}
+  /* KEINE Temperaturzahl mehr. Ein Score mit Nachkommastelle behauptet eine
+     Messung; gebaut werden drei getrennte, erklaerbare Signale (PRD 4.5).
+     Die Waerme bleibt als Verlauf — sie ist das Markenbild, nicht die Zahl. */
+  .therm .sig{font-family:var(--M);font-weight:500;font-size:clamp(8.5px,.85vw,10px);
+    letter-spacing:.12em;white-space:nowrap;padding:5px 9px;border:1px solid currentColor;border-radius:2px}
+  .therm .s-a{color:var(--white);box-shadow:0 0 16px rgba(255,157,60,.25)}
+  .therm .s-b{color:#e8d6c4}
+  .therm .s-c{color:var(--dim);border-color:var(--greyer)}
   .r1{--c1:rgba(255,157,60,.5)} .r2{--c1:rgba(224,99,47,.42)} .r3{--c1:rgba(168,51,104,.4)}
   .r4{--c1:rgba(91,42,110,.42)} .r5{--c1:rgba(42,27,74,.5)}
 
@@ -96,6 +107,9 @@
   .scope.touched .hint-drag{opacity:0}
   .lbl{position:absolute;top:12px;font-family:var(--M);font-size:9.5px;letter-spacing:.18em;z-index:6;pointer-events:none}
   .lbl.left{left:16px;color:var(--greyer)} .lbl.right{right:16px;color:var(--hot)}
+  .siglegend{position:absolute;left:0;right:0;bottom:-26px;text-align:center;z-index:6;pointer-events:none;
+    font-family:var(--M);font-size:8.5px;letter-spacing:.14em;color:var(--dim)}
+  @media(max-width:700px){.siglegend{font-size:7.5px;letter-spacing:.08em}}
 
   /* ══════════ AGITATE ══════════ */
   .agit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--edge);
@@ -122,6 +136,16 @@
     font-family:var(--M);font-size:12.5px;padding:12px 18px;transition:all .16s}
   .opt:hover{border-color:var(--emb);color:var(--ink)}
   .opt.on{background:linear-gradient(100deg,var(--mag),var(--emb));border-color:transparent;color:#fff;font-weight:500}
+  .qhint{font-family:var(--M);font-size:9.5px;letter-spacing:.05em;color:var(--dim);line-height:1.8;margin:-18px 0 26px}
+  /* Die Annahmen sind editierbar, weil sie geschaetzt sind. Eine feste Zahl
+     hier waere genau der Vendor-Claim, gegen den Infrared antritt. */
+  .knobs{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+  .knobs label{display:flex;justify-content:space-between;align-items:center;gap:12px;
+    font-size:13.5px;color:var(--mut);border:1px solid var(--edge);padding:11px 14px}
+  .knobs span{font-family:var(--M);font-size:12px;color:var(--dim);white-space:nowrap}
+  .knobs input{width:52px;background:var(--void);border:1px solid var(--edge);color:var(--hot);
+    font-family:var(--M);font-size:14px;padding:5px 6px;text-align:right}
+  .knobs input:focus{outline:none;border-color:var(--hot)}
   .meter{border:1px solid var(--edge);background:linear-gradient(180deg,var(--deep),var(--void));position:relative;overflow:hidden}
   .meter::before{content:"";position:absolute;inset:0;opacity:var(--fill,0);transition:opacity .8s;
     background:radial-gradient(120% 90% at 50% 120%,var(--mag),transparent 65%)}
@@ -208,9 +232,10 @@
     <div class="kick">FÜR COACHES UND BERATER, DIE ÜBER DMS VERKAUFEN</div>
     <h1>Jeden Monat kauft jemand woanders, <span class="l">der dich zuerst gefragt hat.</span></h1>
     <p class="sub">Er hat nicht Nein gesagt. Er hat gefragt, was es kostet — und deine Antwort kam zwei Tage zu spät. <b>Das Bitterste: Du erfährst nie, dass es passiert ist.</b></p>
+    <p class="wedge">Kein wichtiger Kontakt fällt dir mehr durchs Raster — <b>und jede Nachricht schreibst du selbst.</b></p>
 
     <div class="scope" id="scope">
-      <div class="scope-top"><span>POSTFACH · MONTAG 07:30</span><span class="r" id="scopeState">ZIEH DEN GRIFF →</span></div>
+      <div class="scope-top"><span>POSTFACH · LETZTE 90 TAGE</span><span class="r" id="scopeState">ZIEH DEN GRIFF →</span></div>
       <div class="stage" id="stage">
         <!-- LINKS: wie du es siehst -->
         <div class="layer plain">
@@ -225,15 +250,16 @@
         <!-- RECHTS: wie Infrared es sieht -->
         <div class="layer therm" id="therm">
           <div class="rowlist">
-            <div class="row r1"><span class="nm">Sandra K.</span><span class="why">Preisfrage offen — <q>klingt genau nach dem, was ich brauche</q></span><span class="tmp">38,2°</span></div>
-            <div class="row r2"><span class="nm">Marco B.</span><span class="why">Sein <q>meld dich nach dem Urlaub</q> ist seit 3 Wochen fällig</span><span class="tmp">33,5°</span></div>
-            <div class="row r3"><span class="nm">Jule</span><span class="why">Story-Antwort gestern 21:14 — Fenster offen</span><span class="tmp">29,1°</span></div>
-            <div class="row r4"><span class="nm">Melanie</span><span class="why"><q>Heute Abend</q> — dein Wort, seit 12 Tagen offen</span><span class="tmp">24,7°</span></div>
-            <div class="row r5"><span class="nm">Nico H.</span><span class="why">Kein offener Faden — alles erledigt</span><span class="tmp">14,3°</span></div>
+            <div class="row r1"><span class="nm">Sandra K.</span><span class="why">Preisfrage offen — <q>klingt genau nach dem, was ich brauche</q></span><span class="sig s-a">PREISFRAGE OFFEN</span></div>
+            <div class="row r2"><span class="nm">Marco B.</span><span class="why">Sein <q>meld dich nach dem Urlaub</q> ist seit 3 Wochen fällig</span><span class="sig s-a">ZUSAGE ÜBERFÄLLIG</span></div>
+            <div class="row r3"><span class="nm">Jule</span><span class="why">Story-Antwort gestern 21:14 — Fenster offen</span><span class="sig s-b">FRAGE UNBEANTWORTET</span></div>
+            <div class="row r4"><span class="nm">Melanie</span><span class="why"><q>Heute Abend</q> — dein Wort, seit 12 Tagen offen</span><span class="sig s-a">DEIN WORT OFFEN</span></div>
+            <div class="row r5"><span class="nm">Nico H.</span><span class="why">Kein offener Faden — alles erledigt</span><span class="sig s-c">NICHTS OFFEN</span></div>
           </div>
         </div>
         <div class="lbl left">SO SIEHST DU ES</div>
         <div class="lbl right">SO SIEHT INFRARED ES</div>
+        <div class="siglegend">KEIN PUNKTESYSTEM · DREI PRÜFBARE SIGNALE: OFFENE ZUSAGE · UNBEANTWORTETE FRAGE · KAUFABSICHT BELEGT</div>
         <div class="handle" id="handle"><div class="knob"></div></div>
         <div class="hint-drag" id="hintDrag">ZIEH DEN GRIFF NACH LINKS</div>
       </div>
@@ -250,7 +276,7 @@
   <!-- ═══ RECHNER ═══ -->
   <section class="band">
     <div class="eyeb rv">DEIN LECK</div>
-    <h2 class="rv">Zwei Angaben. Dann weißt du, worüber wir reden.</h2>
+    <h2 class="rv">Deine Zahlen. Deine Annahmen. Dann weißt du, worüber wir reden.</h2>
     <div class="calc">
       <div class="rv">
         <div class="qlab">01 — WAS KOSTET DEIN ANGEBOT?</div>
@@ -260,14 +286,23 @@
           <button class="opt" data-v="5000" type="button">~5.000 €</button>
           <button class="opt" data-v="10000" type="button">10.000 €+</button>
         </div>
-        <div class="qlab">02 — WIE VIELE ANFRAGEN &amp; KUNDEN-DMS AM TAG?</div>
+        <div class="qlab">02 — WIE VIELE ECHTE KAUFANFRAGEN IM MONAT?</div>
         <div class="opts" id="dmOpts">
-          <button class="opt" data-v="2" type="button">Unter 3</button>
-          <button class="opt" data-v="6" type="button">3 – 10</button>
-          <button class="opt" data-v="18" type="button">10 – 30</button>
-          <button class="opt" data-v="40" type="button">Über 30</button>
+          <button class="opt" data-v="6" type="button">Unter 10</button>
+          <button class="opt" data-v="20" type="button">10 – 30</button>
+          <button class="opt" data-v="50" type="button">30 – 80</button>
+          <button class="opt" data-v="100" type="button">Über 80</button>
         </div>
-        <p style="font-family:var(--M);font-size:10px;letter-spacing:.08em;color:var(--dim);line-height:1.9">
+        <p class="qhint">Gemeint sind Menschen, die nach Preis, Ablauf oder Termin fragen — nicht jede DM.</p>
+        <div class="qlab" style="margin-top:8px">03 — DIE ANNAHMEN. ÄNDER SIE.</div>
+        <div class="knobs">
+          <label>Ohne nächsten Schritt versandet
+            <span><input id="kNoStep" type="number" min="0" max="100" step="5" value="35"> %</span></label>
+          <label>Davon hättest du abgeschlossen
+            <span><input id="kClose" type="number" min="0" max="100" step="5" value="30"> %</span></label>
+        </div>
+        <p class="qhint">Für diese beiden Zahlen gibt es keine unabhängige Studie — auch nicht bei den Anbietern, die damit werben. Setz deine eigenen ein.</p>
+        <p style="font-family:var(--M);font-size:10px;letter-spacing:.08em;color:var(--dim);line-height:1.9;margin-top:14px">
           KEINE E-MAIL NÖTIG · ERGEBNIS SOFORT · FORMEL OFFEN
         </p>
       </div>
@@ -279,7 +314,7 @@
           <div class="munit" id="unit">WÄHLE LINKS ZWEI ANGABEN</div>
           <p class="mverd" id="verdict">Die meisten unterschätzen diese Zahl deutlich — verlorene Gespräche beschweren sich nicht.</p>
         </div>
-        <div class="mfine" id="formula">FORMEL: ANFRAGEN/MONAT × 12 % QUALIFIZIERT × 35 % OHNE NÄCHSTEN SCHRITT × 30 % ABSCHLUSS × DEIN PREIS · KONSERVATIV, KEIN VERSPRECHEN</div>
+        <div class="mfine" id="formula">FORMEL: KAUFANFRAGEN/MONAT × % OHNE NÄCHSTEN SCHRITT × % ABSCHLUSS × DEIN PREIS · ALLE ANNAHMEN LINKS ÄNDERBAR</div>
       </div>
     </div>
   </section>
@@ -409,19 +444,39 @@
       if(p<1) requestAnimationFrame(f);
     })(s);
   }
+  const kNoStep=document.getElementById('kNoStep'), kClose=document.getElementById('kClose');
+  const clamp=(el,d)=>{const v=parseFloat(el.value); return (isFinite(v)&&v>=0&&v<=100)?v/100:d};
+  let knobT;
+  [kNoStep,kClose].forEach(el=>el.addEventListener('input',()=>{
+    render();
+    clearTimeout(knobT);
+    knobT=setTimeout(()=>{try{trk('leak_assumption_changed',el.id,parseFloat(el.value)||0)}catch(e){}},900);
+  }));
+
   function render(){
     if(price===null||dms===null) return;
-    const monthly=dms*30, val=Math.round(monthly*0.12*0.35*0.30*price/100)*100;
+    // dms IST jetzt die Zahl der Kaufanfragen pro MONAT. Vorher wurde jede
+    // DM mal 30 genommen — das ergab bei „ueber 30 DMs" 1200 Anfragen und
+    // sechsstellige Monatswerte, die niemand glaubt.
+    const monthly=dms, nostep=clamp(kNoStep,.35), close=clamp(kClose,.30);
+    const val=Math.round(monthly*nostep*close*price/100)*100;
     num.classList.add('live'); state.textContent='BERECHNET';
     meter.style.setProperty('--fill', Math.min(1, val/12000).toFixed(2));
     count(val);
-    unit.textContent=`BEI ~${monthly} ANFRAGEN IM MONAT`;
-    formula.textContent=`FORMEL: ${monthly} ANFRAGEN × 12 % QUALIFIZIERT × 35 % OHNE NÄCHSTEN SCHRITT × 30 % ABSCHLUSS × ${price.toLocaleString('de-DE')} € · KONSERVATIV, KEIN VERSPRECHEN`;
-    verdict.innerHTML = val>=5000
-      ? `Das ist <b>ein Kunde pro Monat</b>, der schon Interesse hatte — und den niemand zurückgeholt hat.`
-      : val>=1500
-        ? `Über ein Jahr rund <b>${(val*12).toLocaleString('de-DE')} €</b> aus Gesprächen, die du längst geführt hast.`
-        : `Klingt klein? Es sind Menschen, die dich <b>zuerst gefragt haben</b>. Die kommen nicht wieder.`;
+    unit.textContent=`BEI ~${monthly} KAUFANFRAGEN IM MONAT`;
+    formula.textContent=`FORMEL: ${monthly} ANFRAGEN × ${Math.round(nostep*100)} % OHNE NÄCHSTEN SCHRITT × ${Math.round(close*100)} % ABSCHLUSS × ${price.toLocaleString('de-DE')} € · SCHÄTZUNG MIT DEINEN ANNAHMEN, KEIN VERSPRECHEN`;
+    // Die Kundenzahl wird GERECHNET, nicht behauptet. Vorher stand bei jedem
+    // Betrag ueber 5.000 € „ein Kunde pro Monat" — bei 5.300 € auf ein
+    // 2.500-€-Angebot sind es zwei, und wer das nachrechnet, glaubt den Rest
+    // auch nicht mehr.
+    const kunden = price>0 ? val/price : 0;
+    verdict.innerHTML = kunden>=1.6
+      ? `Das sind <b>${Math.round(kunden)} Kunden im Monat</b>, die schon Interesse hatten — und die niemand zurückgeholt hat.`
+      : kunden>=0.8
+        ? `Das ist <b>ein Kunde pro Monat</b>, der schon Interesse hatte — und den niemand zurückgeholt hat.`
+        : val>=1500
+          ? `Über ein Jahr rund <b>${(val*12).toLocaleString('de-DE')} €</b> aus Gesprächen, die du längst geführt hast.`
+          : `Klingt klein? Es sind Menschen, die dich <b>zuerst gefragt haben</b>. Die kommen nicht wieder.`;
   }
 })();
 
